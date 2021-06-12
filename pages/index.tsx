@@ -1,8 +1,9 @@
 import React, { FunctionComponent } from 'react'
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
+import Link from 'next/link'
 
-// import { getMarkdownFileData } from "lib/markdownParser";
+import { getMarkdownFileData } from 'lib/markdownParser'
 
 // import { ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
@@ -33,7 +34,13 @@ const HomePage: FunctionComponent<HomePageProps> = ({
         <meta name='description' content='A nextjs elevator app'></meta>
       </Head>
 
-      <div className=''>This is a nextJS app!</div>
+      <div className=''>
+        This is a nextJS app!
+        <br />
+        <Link href='/devblog'>
+          <a>Developer Blog</a>
+        </Link>
+      </div>
       {/* 
       <div className="flex justify-center">
         <div
