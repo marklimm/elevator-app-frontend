@@ -4,8 +4,37 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "eslint": "./node_modules/.bin/eslint \"*/**/*.{js,ts,tsx}\" --fix",
+    "lint": "npm run eslint",  
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^15.12.2",
+    "@types/react": "^17.0.11",
+    "@typescript-eslint/eslint-plugin": "^4.26.1",
+    "@typescript-eslint/parser": "^4.26.1",
+    "eslint": "^7.28.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.24.0",
+    "prettier": "^2.3.1",
+    "typescript": "^4.3.2"
+  },
+  "devDependenciesComments": {
+    "@types/node": "typescript node types",
+    "@types/react": "typescript react types",
+    "@typescript-eslint/eslint-plugin": "allows eslint to parse typescript files",
+    "@typescript-eslint/parser": "allows eslint to parse typescript files",
+    "autoprefixer": "installed alongside tailwind css",
+    "eslint": "code linting",
+    "eslint-config-prettier": "disable the rules that interfere with prettier",
+    "eslint-plugin-prettier": "run prettier as an eslint rule.  See https://github.com/prettier/eslint-plugin-prettier#recommended-configuration for reference",
+    "eslint-plugin-react": "added by `eslint --init` when I said my project uses react",
+    "postcss": "install alongside tailwind css",
+    "prettier": "opinionated code formatting",
+    "tailwindcss": "helpful CSS classes for layout and design",
+    "typescript": "types for javascript"
+  },
 }
