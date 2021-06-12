@@ -4,9 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "next build",
+    "dev": "next dev",
     "eslint": "./node_modules/.bin/eslint \"*/**/*.{js,ts,tsx}\" --fix",
     "lint": "npm run eslint",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "next start",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tsc": "./node_modules/.bin/tsc --noEmit"
+  },
+  "scriptsComments": {
+    "build": "build this nextJS app to be started on a production server",
+    "dev": "run this nextJS in development mode",
+    "eslint": "run linting rules as defined in eslintrc.js",
+    "lint": "run both the `eslint` and the `tsc` commands",
+    "start": "start the nextJS app on a production server",
+    "test": "run unit tests which I don't have any yet",
+    "tsc": "check for typescript errors"
   },
   "author": "",
   "license": "ISC",
