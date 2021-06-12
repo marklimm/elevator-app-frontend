@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "eslint": "./node_modules/.bin/eslint \"*/**/*.{js,ts,tsx}\" --fix",
-    "lint": "npm run eslint",  
+    "lint": "npm run eslint",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -15,11 +15,14 @@
     "@types/react": "^17.0.11",
     "@typescript-eslint/eslint-plugin": "^4.26.1",
     "@typescript-eslint/parser": "^4.26.1",
+    "autoprefixer": "^10.2.6",
     "eslint": "^7.28.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
+    "postcss": "^8.3.2",
     "prettier": "^2.3.1",
+    "tailwindcss": "^2.1.4",
     "typescript": "^4.3.2"
   },
   "devDependenciesComments": {
@@ -37,4 +40,20 @@
     "tailwindcss": "helpful CSS classes for layout and design",
     "typescript": "types for javascript"
   },
+  "dependencies": {
+    "next": "^10.2.3",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "sass": "^1.34.1"
+  },
+  "dependenciesComments": {
+    "gray-matter": "parsing the front matter of markdown files",
+    "next": "SSG react web framework",
+    "react": "javascript HTML rendering library",
+    "react-dom": "connect react to the HTML DOM",
+    "react-toastify": "toast messages",
+    "remark": "convert markdown to HTML",
+    "remark-html": "convert markdown to HTML",
+    "sass": "CSS extension"
+  }
 }
