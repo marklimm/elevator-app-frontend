@@ -18,6 +18,7 @@ export const Building: FunctionComponent<BuildingProps> = ({
   //  setup the connection to the server-side socket io instance
   const {
     addPeople,
+    buildingName,
     // elevators,
     numFloors,
     numPeopleInBuilding,
@@ -42,7 +43,7 @@ export const Building: FunctionComponent<BuildingProps> = ({
 
   return (
     <>
-      <div className='text-xl font-bold'>{`Placeholder for name of building`}</div>
+      <div className='text-xl font-bold'>{buildingName}</div>
       There are currently {numPeopleInBuilding} people in the building
       <br />
       <br />

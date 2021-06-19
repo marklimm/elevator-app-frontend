@@ -7,6 +7,11 @@ import {
   ElevatorDirective,
 } from 'lib/Elevator/Elevator'
 
+import {
+  NewConnectionBuildingResponse,
+  NumPeopleUpdatedResponse,
+} from 'lib/payloads/Building'
+
 type UseSocketIOReturnType = BuildingState & {
   // elevators: null,
   // numFloors: number,
@@ -21,6 +26,9 @@ type UseSocketIOReturnType = BuildingState & {
 export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
   const socket = useRef<Socket>(null)
 
+  const [buildingName, setBuildingName] = useState('')
+
+  const [numFloors, setNumFloors] = useState(0)
   const [numPeopleInBuilding, setNumPeopleInBuilding] = useState(0)
   // const [statusMessages, setStatusMessages] = useState<string[]>([])
 
@@ -28,15 +36,22 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
     //  connect to the server-side socketIO
     socket.current = io(socketIOUrl)
 
-    socket.current.on('newConnectionAck', () => {
-      //  client-side response to the server acknowledging the connection
+    socket.current.on(
+      'newConnectionAck',
+      (response: NewConnectionBuildingResponse) => {
+        //  client-side response to the server acknowledging the connection
 
-      console.log('the server has recognized me!')
-      // console.log('newConnectionAck : buildingState', buildingState)
+        console.log('the server has recognized me!', response)
+        // console.log('newConnectionAck : buildingState', buildingState)
 
-      // setElevators(buildingState.elevators)
-      //  now connected to socket.io
-    })
+        setBuildingName(response.name)
+        setNumPeopleInBuilding(response.numPeople)
+        setNumFloors(response.numFloors)
+
+        // setElevators(buildingState.elevators)
+        //  now connected to socket.io
+      }
+    )
 
     socket.current.on('status-update', (message: StatusMessage) => {
       //  client has received a status update from the server
@@ -56,20 +71,34 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
   // }
 
   const addPeople = () => {
-    socket.current.emit('increase-people', 25, (response) => {
-      console.log('response to increase-people', response)
-    })
+    socket.current.emit(
+      'increase-people',
+      25,
+      (response: NumPeopleUpdatedResponse) => {
+        console.log('response to increase-people', response)
+
+        setNumPeopleInBuilding(response.numPeople)
+      }
+    )
   }
 
   const removePeople = () => {
-    socket.current.emit('decrease-people', 25, (response) => {
-      console.log('response to decrease-people', response)
-    })
+    socket.current.emit(
+      'decrease-people',
+      25,
+      (response: NumPeopleUpdatedResponse) => {
+        console.log('response to decrease-people', response)
+
+        setNumPeopleInBuilding(response.numPeople)
+      }
+    )
   }
 
   return {
     addPeople,
+    buildingName,
     // elevators,
+    numFloors,
     numPeopleInBuilding,
     // goToFloor,
     removePeople,
