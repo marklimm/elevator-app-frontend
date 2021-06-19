@@ -1,11 +1,9 @@
-import React, { FunctionComponent, useCallback, useState } from 'react'
+import React, { FunctionComponent } from 'react'
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 
-import { getMarkdownFileData } from 'lib/markdownParser'
-
-import { StatusMessage, useSocketIO } from 'lib/socketIO/useSocketIO'
+import { Building } from 'components/Building/Building'
 
 // import { ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
@@ -33,26 +31,6 @@ const HomePage: FunctionComponent<HomePageProps> = ({
   readmeContent,
   socketIOUrl,
 }: HomePageProps) => {
-  const [statusMessages, setStatusMessages] = useState<string[]>([])
-
-  const updateMessageList = useCallback((message: StatusMessage) => {
-    setStatusMessages((statusMessages) => [message.text, ...statusMessages])
-  }, [])
-
-  //  setup the connection to the server-side socket io instance
-  const { sendMessage } = useSocketIO(socketIOUrl, updateMessageList)
-
-  console.log('app render')
-
-  const buttonClicked = () => {
-    const clientSentMessage: StatusMessage = {
-      text: `message sent to server at  ${new Date()}`,
-    }
-
-    // socket.emit('clientMessage', clientSentMessage)
-    sendMessage(clientSentMessage)
-  }
-
   return (
     <>
       <Head>
@@ -63,20 +41,11 @@ const HomePage: FunctionComponent<HomePageProps> = ({
       <div className=''>
         This is a nextJS app!
         <br />
-        <button onClick={buttonClicked}>Send realtime message to server</button>
-        <br />
         <Link href='/devblog'>
           <a>Developer Blog</a>
         </Link>
         <div className='m-3'>
-          {statusMessages.length === 0 && (
-            <div>No status messages received yet</div>
-          )}
-
-          {statusMessages.length > 0 &&
-            statusMessages.map((message, index) => (
-              <div key={index}>{message}</div>
-            ))}
+          <Building socketIOUrl={socketIOUrl} />
         </div>
       </div>
       {/* 

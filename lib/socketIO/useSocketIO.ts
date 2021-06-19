@@ -1,21 +1,15 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
 
-/**
- * A message that is sent between client and server via socketio
- */
-export interface StatusMessage {
-  text: string
-}
+import {
+  BuildingState,
+  Elevator,
+  ElevatorDirective,
+} from 'lib/Elevator/Elevator'
 
-/**
- * A callback function that updates the react component when a socketio message is received from the server to the client
- */
-export interface OnStatusUpdateReceived {
-  (message: StatusMessage): void
-}
-
-interface UseSocketIOReturnType {
+type UseSocketIOReturnType = BuildingState & {
+  // elevators: null,
+  // numFloors: number,
   sendMessage: (message: StatusMessage) => void
 }
 
@@ -24,30 +18,32 @@ interface UseSocketIOReturnType {
  * @param onStatusUpdateReceived
  * @returns
  */
-export const useSocketIO = (
-  socketIOUrl = '',
-  onStatusUpdateReceived: OnStatusUpdateReceived
-): UseSocketIOReturnType => {
+export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
   const socket = useRef<Socket>(null)
+
+  const [numPeopleInBuilding, setNumPeopleInBuilding] = useState(0)
+  // const [statusMessages, setStatusMessages] = useState<string[]>([])
 
   useEffect(() => {
     //  connect to the server-side socketIO
     socket.current = io(socketIOUrl)
 
-    // socket.on('connectionAck', (arg) => {
-    //   //  client-side response to the server acknowledging the connection
+    socket.current.on('newConnectionAck', () => {
+      //  client-side response to the server acknowledging the connection
 
-    //   console.log(arg)
+      console.log('the server has recognized me!')
+      // console.log('newConnectionAck : buildingState', buildingState)
 
-    //   //  now connected to socket.io
-    // })
+      // setElevators(buildingState.elevators)
+      //  now connected to socket.io
+    })
 
     socket.current.on('status-update', (message: StatusMessage) => {
       //  client has received a status update from the server
 
-      console.log('received status-update', message.text)
+      console.log('received status-update', message)
 
-      onStatusUpdateReceived(message)
+      setNumPeopleInBuilding(message.numPeopleInBuilding)
     })
   }, [])
 
@@ -55,11 +51,27 @@ export const useSocketIO = (
    * This function sends a message from client to server
    * @param message The message to send to the socketio server
    */
-  const sendMessage = (message: StatusMessage) => {
-    socket.current.emit('client-message', message)
+  // const goToFloor = (elevatorDirective: ElevatorDirective) => {
+  //   socket.current.emit('elevator-directive', elevatorDirective)
+  // }
+
+  const addPeople = () => {
+    socket.current.emit('increase-people', 25, (response) => {
+      console.log('response to increase-people', response)
+    })
+  }
+
+  const removePeople = () => {
+    socket.current.emit('decrease-people', 25, (response) => {
+      console.log('response to decrease-people', response)
+    })
   }
 
   return {
-    sendMessage,
+    addPeople,
+    // elevators,
+    numPeopleInBuilding,
+    // goToFloor,
+    removePeople,
   }
 }
