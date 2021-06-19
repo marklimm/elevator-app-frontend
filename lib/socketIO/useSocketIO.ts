@@ -2,15 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
 
 import {
-  BuildingState,
-  Elevator,
-  ElevatorDirective,
-} from 'lib/Elevator/Elevator'
-
-import {
+  ElevatorRequestResponse,
   NewConnectionBuildingResponse,
   NumPeopleUpdatedResponse,
-} from 'lib/payloads/Building'
+  OkOrError,
+  REQUEST_ELEVATOR,
+} from 'lib/BuildingActions'
 
 type UseSocketIOReturnType = BuildingState & {
   // elevators: null,
@@ -30,6 +27,8 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
 
   const [numFloors, setNumFloors] = useState(0)
   const [numPeopleInBuilding, setNumPeopleInBuilding] = useState(0)
+
+  const [activeFloorRequest, setActiveFloorRequest] = useState<number>()
   // const [statusMessages, setStatusMessages] = useState<string[]>([])
 
   useEffect(() => {
@@ -94,13 +93,34 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
     )
   }
 
+  const requestElevator = () => {
+    socket.current.emit(
+      REQUEST_ELEVATOR,
+      4,
+      (response: ElevatorRequestResponse) => {
+        console.log('response to elevator request', response)
+
+        if (response.status === OkOrError.Error) {
+          console.log(
+            'oh no some error happened when trying to request the elevaotr!  Please try again later'
+          )
+          return
+        }
+
+        setActiveFloorRequest(response.destFloor)
+      }
+    )
+  }
+
   return {
+    activeFloorRequest,
     addPeople,
     buildingName,
     // elevators,
     numFloors,
     numPeopleInBuilding,
     // goToFloor,
+    requestElevator,
     removePeople,
   }
 }

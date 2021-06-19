@@ -8,7 +8,7 @@ import { Building } from 'components/Building/Building'
 // import { ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 
-import styles from './index.module.scss'
+// import styles from './index.module.scss'
 
 interface HomePageProps {
   readmeContent: string
@@ -28,7 +28,7 @@ interface HomePageProps {
 // const socket = io('localhost:8000')
 
 const HomePage: FunctionComponent<HomePageProps> = ({
-  readmeContent,
+  // readmeContent,
   socketIOUrl,
 }: HomePageProps) => {
   return (

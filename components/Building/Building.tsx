@@ -6,23 +6,25 @@ interface BuildingProps {
   socketIOUrl: string
 }
 
-const range = (start, end) => {
-  return Array(end - start + 1)
-    .fill()
-    .map((_, idx) => start + idx)
-}
+// const range = (start, end) => {
+//   return Array(end - start + 1)
+//     .fill()
+//     .map((_, idx) => start + idx)
+// }
 
 export const Building: FunctionComponent<BuildingProps> = ({
   socketIOUrl,
 }: BuildingProps) => {
   //  setup the connection to the server-side socket io instance
   const {
+    activeFloorRequest,
     addPeople,
     buildingName,
     // elevators,
     numFloors,
     numPeopleInBuilding,
     // goToFloor,
+    requestElevator,
     removePeople,
   } = useSocketIO(socketIOUrl)
 
@@ -53,7 +55,13 @@ export const Building: FunctionComponent<BuildingProps> = ({
       <button onClick={addPeople}>Add people</button>
       <br />
       <button onClick={removePeople}>Remove people</button>
+      <button onClick={requestElevator}>Request Elevator</button>
       <br />
+      {activeFloorRequest && (
+        <span className='text-lg'>
+          There is an active floor request to go to floor: {activeFloorRequest}
+        </span>
+      )}
       {/* <div className='flex'>
         {elevatorsArr.map((elevator, index) => (
           <div key={index} className='m-5' style={{ minWidth: '400px' }}>
