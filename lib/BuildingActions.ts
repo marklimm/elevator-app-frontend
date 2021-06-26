@@ -58,12 +58,46 @@ export type NewConnectionBuildingResponse = BuildingDetails &
 
 export type StatusUpdateResponse = BuildingStatus & ResponseStatus
 
+export enum Direction {
+  GOING_DOWN = 'going-down',
+  GOING_UP = 'going-up',
+}
+
 // /**
 //  * The request object for when the user requests that the elevator go to a destination floor
 //  */
 export interface ElevatorRequest {
-  destFloor: number
+  fromFloor: number
+  direction: Direction
 }
+
+export enum ElevatorStatus {
+  DOORS_CLOSING = 'doors-closing',
+  DOORS_OPENING = 'doors-opening',
+  INACTIVE = 'inactive',
+  MOVING = 'moving',
+  READY = 'ready',
+  USERS_ENTERING = 'users-entering',
+}
+
+export interface Elevator {
+  name: string
+  currFloor: number
+  destFloor: number
+  people: User[]
+  status: ElevatorStatus
+  direction: Direction
+}
+
+export interface Elevators {
+  [key: string]: Elevator
+}
+
+export interface ElevatorResponse {
+  elevator: Elevator
+}
+
+export type ElevatorStatusUpdate = ResponseStatus & ElevatorResponse
 
 // /**
 //  * The response sent after a user has requested that the elevator go to a destination floor

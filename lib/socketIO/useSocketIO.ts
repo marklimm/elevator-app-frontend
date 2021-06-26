@@ -4,7 +4,10 @@ import { io, Socket } from 'socket.io-client'
 import { getDisplayFloorNumber } from 'lib/FloorNumberConverter'
 
 import {
+  Direction,
   ElevatorRequestResponse,
+  ElevatorStatus,
+  ElevatorStatusUpdate,
   NewConnectionBuildingResponse,
   NumPeopleUpdatedResponse,
   OkOrError,
@@ -33,6 +36,9 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
   const [numFloors, setNumFloors] = useState(0)
   const [numPeopleInBuilding, setNumPeopleInBuilding] = useState(0)
 
+  const [elevatorStatusStrings, setElevatorStatusStrings] = useState<string[]>(
+    []
+  )
   const [statusStrings, setStatusStrings] = useState<string[]>([])
 
   const [activeFloorRequest, setActiveFloorRequest] = useState<number>()
@@ -69,6 +75,32 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
     //     setNumPeopleInBuilding(message.numPeopleInBuilding)
     //   }
     // )
+
+    const onElevatorUpdate = ({ elevator }: ElevatorStatusUpdate) => {
+      if (elevator.status === ElevatorStatus.MOVING) {
+        const newString = `${new Date()} - ${elevator.name} has moved to the ${
+          elevator.currFloor
+        } floor and is moving ${
+          elevator.direction === Direction.GOING_UP ? 'up' : 'down'
+        } towards the ${elevator.destFloor} floor`
+
+        setElevatorStatusStrings((prevStrings) => {
+          return [newString, ...prevStrings]
+        })
+
+        return
+      } else if (elevator.status === ElevatorStatus.DOORS_OPENING) {
+        const newString = `${new Date()} - ${
+          elevator.name
+        } is opening its doors on the ${elevator.currFloor} floor`
+
+        setElevatorStatusStrings((prevStrings) => {
+          return [newString, ...prevStrings]
+        })
+
+        return
+      }
+    }
 
     const onStatusUpdate = (data: StatusUpdateResponse) => {
       //  client has received a status update from the server
@@ -110,9 +142,11 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
     }
 
     socket.current.on('status-update', onStatusUpdate)
+    socket.current.on('elevator-update', onElevatorUpdate)
 
     return () => {
       socket.current.off('status-update', onStatusUpdate)
+      socket.current.off('elevator-update', onElevatorUpdate)
     }
   }, [])
 
@@ -172,6 +206,7 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
     addPeople,
     buildingName,
     elevators,
+    elevatorStatusStrings,
     numFloors,
     numPeopleInBuilding,
     // goToFloor,

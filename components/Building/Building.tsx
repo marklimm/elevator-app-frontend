@@ -21,6 +21,7 @@ export const Building: FunctionComponent<BuildingProps> = ({
     addPeople,
     buildingName,
     elevators,
+    elevatorStatusStrings,
     numFloors,
     numPeopleInBuilding,
     // goToFloor,
@@ -55,8 +56,18 @@ export const Building: FunctionComponent<BuildingProps> = ({
       <br />
       <button onClick={removePeople}>Remove people</button>
       <div className='mt-3'>
+        <h1 className='text-xl'>People updates:</h1>
         {statusStrings.length > 0 &&
           statusStrings.map((str, index) => (
+            <div key={index} className='mb-2'>
+              {str}
+            </div>
+          ))}
+      </div>
+      <div className='mt-3'>
+        <h1 className='text-xl'>Elevator updates:</h1>
+        {elevatorStatusStrings.length > 0 &&
+          elevatorStatusStrings.map((str, index) => (
             <div key={index} className='mb-2'>
               {str}
             </div>
