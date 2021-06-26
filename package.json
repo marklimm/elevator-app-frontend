@@ -7,7 +7,7 @@
     "build": "next build",
     "dev": "next dev",
     "eslint": "./node_modules/.bin/eslint \"*/**/*.{js,ts,tsx}\" --fix",
-    "lint": "npm run eslint",
+    "lint": "npm run eslint && npm run tsc",
     "start": "next start",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "./node_modules/.bin/tsc --noEmit"
