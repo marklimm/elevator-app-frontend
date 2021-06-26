@@ -12,6 +12,7 @@ import {
   OkOrError,
   REQUEST_ELEVATOR,
   StatusUpdateResponse,
+  UserStatus,
 } from 'lib/BuildingActions'
 
 type UseSocketIOReturnType = BuildingState & {
@@ -43,7 +44,7 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
     //  connect to the server-side socketIO
     socket.current = io(socketIOUrl)
 
-    socket.current.on(
+    socket.current.once(
       'newConnectionAck',
       (response: NewConnectionBuildingResponse) => {
         //  client-side response to the server acknowledging the connection
@@ -71,7 +72,7 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
     //   }
     // )
 
-    socket.current.on('status-update', (data: StatusUpdateResponse) => {
+    const onStatusUpdate = (data: StatusUpdateResponse) => {
       //  client has received a status update from the server
 
       console.log('status-update', data)
@@ -79,20 +80,44 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
 
       // responseStrs.push(`There are currently ${numPeople} in the building`)
 
-      const usersStatus = data.usersStatus
+      const users = data.users
 
-      const statusStrings = Object.keys(usersStatus).map((name) => {
-        const { currFloor, destFloor } = usersStatus[name]
+      const newStatusStrings = Object.keys(users).map((name) => {
+        const { currFloor, destFloor, status } = users[name]
 
-        return `${name} is on the ${getDisplayFloorNumber(
-          currFloor
-        )} floor and wants to get to the ${getDisplayFloorNumber(
-          destFloor
-        )} floor`
+        let statusString = ''
+        switch (status) {
+          case UserStatus.NEWLY_SPAWNED:
+            statusString = `${name} has just appeared.  They are on the ${getDisplayFloorNumber(
+              currFloor
+            )} floor and want to get to the ${getDisplayFloorNumber(
+              destFloor
+            )} floor`
+            break
+
+          case UserStatus.WAITING_ON_ELEVATOR:
+            statusString = `${name} clicked the button.  They are now waiting on the elevator.  They are on the ${getDisplayFloorNumber(
+              currFloor
+            )} floor and want to get to the ${getDisplayFloorNumber(
+              destFloor
+            )} floor`
+
+            break
+        }
+
+        return `${new Date()} - ${statusString}`
       })
 
-      setStatusStrings(statusStrings)
-    })
+      setStatusStrings((statusStrings) => {
+        return [...newStatusStrings, ...statusStrings]
+      })
+    }
+
+    socket.current.on('status-update', onStatusUpdate)
+
+    return () => {
+      socket.current.off('status-update', onStatusUpdate)
+    }
   }, [])
 
   /**

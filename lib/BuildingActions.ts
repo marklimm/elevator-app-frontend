@@ -15,19 +15,27 @@ export interface BuildingDetails {
   yearBuilt: number
 }
 
-export interface UserStatus {
+export enum UserStatus {
+  NEWLY_SPAWNED = 'newly-spawned',
+  WAITING_ON_ELEVATOR = 'waiting-on-elevator',
+  IN_ELEVATOR = 'in-elevator',
+  AT_DESTINATION = 'at-destination',
+}
+
+export interface User {
   name: string
   currFloor: number
   destFloor: number
+  status: UserStatus
 }
 
-export interface UsersStatus {
-  [key: string]: UserStatus
+export interface Users {
+  [key: string]: User
 }
 
 export interface BuildingStatus {
   numPeople: number
-  usersStatus?: UsersStatus
+  users?: Users
 }
 
 export enum OkOrError {

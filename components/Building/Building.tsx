@@ -56,7 +56,11 @@ export const Building: FunctionComponent<BuildingProps> = ({
       <button onClick={removePeople}>Remove people</button>
       <div className='mt-3'>
         {statusStrings.length > 0 &&
-          statusStrings.map((str, index) => <span key={index}>{str}</span>)}
+          statusStrings.map((str, index) => (
+            <div key={index} className='mb-2'>
+              {str}
+            </div>
+          ))}
       </div>
       {/* <button onClick={requestElevator}>Request Elevator</button>
       <br />
