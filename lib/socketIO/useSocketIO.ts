@@ -5,22 +5,22 @@ import { getDisplayFloorNumber } from 'lib/FloorNumberConverter'
 
 import {
   Direction,
-  ElevatorRequestResponse,
+  // ElevatorRequestResponse,
   ElevatorStatus,
   ElevatorStatusUpdate,
   NewConnectionBuildingResponse,
-  NumPeopleUpdatedResponse,
+  // NumPeopleUpdatedResponse,
   OkOrError,
   REQUEST_ELEVATOR,
   StatusUpdateResponse,
   UserStatus,
 } from 'lib/BuildingActions'
 
-type UseSocketIOReturnType = BuildingState & {
-  // elevators: null,
-  // numFloors: number,
-  sendMessage: (message: StatusMessage) => void
-}
+// type UseSocketIOReturnType = BuildingState & {
+//   // elevators: null,
+//   // numFloors: number,
+//   sendMessage: (message: StatusMessage) => void
+// }
 
 /**
  * This custom hook allows a react component to send and receive messages from the server-side socketIO instance
@@ -31,7 +31,7 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
   const socket = useRef<Socket>(null)
 
   const [buildingName, setBuildingName] = useState('')
-  const [elevators, setElevators] = useState<string>([])
+  // const [elevators, setElevators] = useState<string>([])
 
   const [numFloors, setNumFloors] = useState(0)
   const [numPeopleInBuilding, setNumPeopleInBuilding] = useState(0)
@@ -60,7 +60,7 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
         setNumPeopleInBuilding(response.numPeople)
         setNumFloors(response.numFloors)
 
-        setElevators(response.elevators)
+        // setElevators(response.elevators)
 
         // setElevators(buildingState.elevators)
         //  now connected to socket.io
@@ -78,11 +78,13 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
 
     const onElevatorUpdate = ({ elevator }: ElevatorStatusUpdate) => {
       if (elevator.status === ElevatorStatus.MOVING) {
-        const newString = `${new Date()} - ${elevator.name} has moved to the ${
+        const newString = `${
+          elevator.name
+        } has moved to the ${getDisplayFloorNumber(
           elevator.currFloor
-        } floor and is moving ${
+        )} floor and is moving ${
           elevator.direction === Direction.GOING_UP ? 'up' : 'down'
-        } towards the ${elevator.destFloor} floor`
+        } towards the ${getDisplayFloorNumber(elevator.destFloor)} floor`
 
         setElevatorStatusStrings((prevStrings) => {
           return [newString, ...prevStrings]
@@ -90,9 +92,11 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
 
         return
       } else if (elevator.status === ElevatorStatus.DOORS_OPENING) {
-        const newString = `${new Date()} - ${
+        const newString = `${
           elevator.name
-        } is opening its doors on the ${elevator.currFloor} floor`
+        } is opening its doors on the ${getDisplayFloorNumber(
+          elevator.currFloor
+        )} floor`
 
         setElevatorStatusStrings((prevStrings) => {
           return [newString, ...prevStrings]
@@ -133,7 +137,7 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
             break
         }
 
-        return `${new Date()} - ${statusString}`
+        return `${statusString}`
       })
 
       setStatusStrings((statusStrings) => {
@@ -205,7 +209,7 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
     activeFloorRequest,
     addPeople,
     buildingName,
-    elevators,
+    // elevators,
     elevatorStatusStrings,
     numFloors,
     numPeopleInBuilding,

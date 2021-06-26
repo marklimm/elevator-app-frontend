@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from 'react'
 
 import { useSocketIO } from 'lib/socketIO/useSocketIO'
+import { DisplayDate } from 'components/DisplayDate/DisplayDate'
 
 interface BuildingProps {
   socketIOUrl: string
@@ -17,15 +18,15 @@ export const Building: FunctionComponent<BuildingProps> = ({
 }: BuildingProps) => {
   //  setup the connection to the server-side socket io instance
   const {
-    activeFloorRequest,
+    // activeFloorRequest,
     addPeople,
     buildingName,
-    elevators,
+    // elevators,
     elevatorStatusStrings,
     numFloors,
     numPeopleInBuilding,
     // goToFloor,
-    requestElevator,
+    // requestElevator,
     removePeople,
     statusStrings,
   } = useSocketIO(socketIOUrl)
@@ -55,23 +56,26 @@ export const Building: FunctionComponent<BuildingProps> = ({
       <button onClick={addPeople}>Add people</button>
       <br />
       <button onClick={removePeople}>Remove people</button>
-      <div className='mt-3'>
-        <h1 className='text-xl'>People updates:</h1>
-        {statusStrings.length > 0 &&
-          statusStrings.map((str, index) => (
-            <div key={index} className='mb-2'>
-              {str}
-            </div>
-          ))}
-      </div>
-      <div className='mt-3'>
-        <h1 className='text-xl'>Elevator updates:</h1>
-        {elevatorStatusStrings.length > 0 &&
-          elevatorStatusStrings.map((str, index) => (
-            <div key={index} className='mb-2'>
-              {str}
-            </div>
-          ))}
+      <div className='flex mt-3'>
+        <div className='p-3 w-1/2'>
+          <h1 className='text-xl'>People updates:</h1>
+          {statusStrings.length > 0 &&
+            statusStrings.map((str, index) => (
+              <div key={index} className='mb-2'>
+                {str}
+              </div>
+            ))}
+        </div>
+
+        <div className='p-3 w-1/2'>
+          <h1 className='text-xl'>Elevator updates:</h1>
+          {elevatorStatusStrings.length > 0 &&
+            elevatorStatusStrings.map((str, index) => (
+              <div key={index} className='mb-2'>
+                {str}
+              </div>
+            ))}
+        </div>
       </div>
       {/* <button onClick={requestElevator}>Request Elevator</button>
       <br />
