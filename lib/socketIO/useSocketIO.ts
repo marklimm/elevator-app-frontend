@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
 
+import { getDisplayFloorNumber } from 'lib/FloorNumberConverter'
+
 import {
   ElevatorRequestResponse,
   ElevatorTakingRequestResponse,
@@ -82,7 +84,11 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
       const statusStrings = Object.keys(usersStatus).map((name) => {
         const { currFloor, destFloor } = usersStatus[name]
 
-        return `${name} is on the ${currFloor} floor and wants to get to the ${destFloor} floor`
+        return `${name} is on the ${getDisplayFloorNumber(
+          currFloor
+        )} floor and wants to get to the ${getDisplayFloorNumber(
+          destFloor
+        )} floor`
       })
 
       setStatusStrings(statusStrings)
