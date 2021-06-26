@@ -5,8 +5,6 @@ import { getDisplayFloorNumber } from 'lib/FloorNumberConverter'
 
 import {
   ElevatorRequestResponse,
-  ElevatorTakingRequestResponse,
-  ELEVATOR_STATUS,
   NewConnectionBuildingResponse,
   NumPeopleUpdatedResponse,
   OkOrError,
@@ -80,10 +78,8 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
 
       // responseStrs.push(`There are currently ${numPeople} in the building`)
 
-      const users = data.users
-
-      const newStatusStrings = Object.keys(users).map((name) => {
-        const { currFloor, destFloor, status } = users[name]
+      const newStatusStrings = data.users.map((user) => {
+        const { currFloor, destFloor, name, status } = user
 
         let statusString = ''
         switch (status) {

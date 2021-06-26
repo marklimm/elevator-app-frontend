@@ -34,8 +34,8 @@ export interface Users {
 }
 
 export interface BuildingStatus {
-  numPeople: number
-  users?: Users
+  numPeople?: number
+  users?: User[]
 }
 
 export enum OkOrError {
@@ -61,9 +61,9 @@ export type StatusUpdateResponse = BuildingStatus & ResponseStatus
 // /**
 //  * The request object for when the user requests that the elevator go to a destination floor
 //  */
-// export interface ElevatorRequest {
-//   destFloor: number
-// }
+export interface ElevatorRequest {
+  destFloor: number
+}
 
 // /**
 //  * The response sent after a user has requested that the elevator go to a destination floor
