@@ -20,15 +20,14 @@ export const Building: FunctionComponent<BuildingProps> = ({
     activeFloorRequest,
     addPeople,
     buildingName,
-    // elevators,
+    elevators,
     numFloors,
     numPeopleInBuilding,
     // goToFloor,
     requestElevator,
     removePeople,
+    statusStrings,
   } = useSocketIO(socketIOUrl)
-
-  console.log('app render')
 
   // const buttonPressed = (elevatorName = '', destFloor = 1) => {
   //   console.log('floorClicked : destFloor', destFloor)
@@ -55,13 +54,27 @@ export const Building: FunctionComponent<BuildingProps> = ({
       <button onClick={addPeople}>Add people</button>
       <br />
       <button onClick={removePeople}>Remove people</button>
-      <button onClick={requestElevator}>Request Elevator</button>
+      <div className='mt-3'>
+        {statusStrings.length > 0 &&
+          statusStrings.map((str, index) => <span key={index}>{str}</span>)}
+      </div>
+      {/* <button onClick={requestElevator}>Request Elevator</button>
       <br />
-      {activeFloorRequest && (
+      {elevators.length > 0 && (
+        <div className='flex'>
+          {elevators.map((elevator) => (
+            <div key={elevator} className='m-4'>
+              <div className='text-lg'>{elevator}</div>
+              <div>messages about this specific elevator</div>
+            </div>
+          ))}
+        </div>
+      )} */}
+      {/* {activeFloorRequest && (
         <span className='text-lg'>
           There is an active floor request to go to floor: {activeFloorRequest}
         </span>
-      )}
+      )} */}
       {/* <div className='flex'>
         {elevatorsArr.map((elevator, index) => (
           <div key={index} className='m-5' style={{ minWidth: '400px' }}>

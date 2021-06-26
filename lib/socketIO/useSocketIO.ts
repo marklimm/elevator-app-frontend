@@ -3,10 +3,13 @@ import { io, Socket } from 'socket.io-client'
 
 import {
   ElevatorRequestResponse,
+  ElevatorTakingRequestResponse,
+  ELEVATOR_STATUS,
   NewConnectionBuildingResponse,
   NumPeopleUpdatedResponse,
   OkOrError,
   REQUEST_ELEVATOR,
+  StatusUpdateResponse,
 } from 'lib/BuildingActions'
 
 type UseSocketIOReturnType = BuildingState & {
@@ -24,9 +27,12 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
   const socket = useRef<Socket>(null)
 
   const [buildingName, setBuildingName] = useState('')
+  const [elevators, setElevators] = useState<string>([])
 
   const [numFloors, setNumFloors] = useState(0)
   const [numPeopleInBuilding, setNumPeopleInBuilding] = useState(0)
+
+  const [statusStrings, setStatusStrings] = useState<string[]>([])
 
   const [activeFloorRequest, setActiveFloorRequest] = useState<number>()
   // const [statusMessages, setStatusMessages] = useState<string[]>([])
@@ -47,17 +53,39 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
         setNumPeopleInBuilding(response.numPeople)
         setNumFloors(response.numFloors)
 
+        setElevators(response.elevators)
+
         // setElevators(buildingState.elevators)
         //  now connected to socket.io
       }
     )
 
-    socket.current.on('status-update', (message: StatusMessage) => {
+    // socket.current.on(
+    //   ELEVATOR_STATUS,
+    //   (response: ElevatorTakingRequestResponse) => {
+    //     response.message
+
+    //     setNumPeopleInBuilding(message.numPeopleInBuilding)
+    //   }
+    // )
+
+    socket.current.on('status-update', (data: StatusUpdateResponse) => {
       //  client has received a status update from the server
 
-      console.log('received status-update', message)
+      console.log('status-update', data)
+      setNumPeopleInBuilding(data.numPeople)
 
-      setNumPeopleInBuilding(message.numPeopleInBuilding)
+      // responseStrs.push(`There are currently ${numPeople} in the building`)
+
+      const usersStatus = data.usersStatus
+
+      const statusStrings = Object.keys(usersStatus).map((name) => {
+        const { currFloor, destFloor } = usersStatus[name]
+
+        return `${name} is on the ${currFloor} floor and wants to get to the ${destFloor} floor`
+      })
+
+      setStatusStrings(statusStrings)
     })
   }, [])
 
@@ -116,11 +144,12 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
     activeFloorRequest,
     addPeople,
     buildingName,
-    // elevators,
+    elevators,
     numFloors,
     numPeopleInBuilding,
     // goToFloor,
     requestElevator,
     removePeople,
+    statusStrings,
   }
 }
