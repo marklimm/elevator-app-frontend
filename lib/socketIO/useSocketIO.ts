@@ -77,32 +77,34 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
     // )
 
     const onElevatorUpdate = ({ elevator }: ElevatorStatusUpdate) => {
-      if (elevator.status === ElevatorStatus.MOVING) {
-        const newString = `${
-          elevator.name
-        } has moved to the ${getDisplayFloorNumber(
-          elevator.currFloor
-        )} floor and is moving ${
-          elevator.direction === Direction.GOING_UP ? 'up' : 'down'
-        } towards the ${getDisplayFloorNumber(elevator.destFloor)} floor`
+      let newString = ''
 
-        setElevatorStatusStrings((prevStrings) => {
-          return [newString, ...prevStrings]
-        })
+      switch (elevator.status) {
+        case ElevatorStatus.MOVING:
+          newString = `${
+            elevator.name
+          } has moved to the ${getDisplayFloorNumber(
+            elevator.currFloor
+          )} floor and is moving ${
+            elevator.direction === Direction.GOING_UP ? 'up' : 'down'
+          } towards the ${getDisplayFloorNumber(elevator.destFloor)} floor`
 
-        return
-      } else if (elevator.status === ElevatorStatus.DOORS_OPENING) {
-        const newString = `${
-          elevator.name
-        } is opening its doors on the ${getDisplayFloorNumber(
-          elevator.currFloor
-        )} floor`
+          setElevatorStatusStrings((prevStrings) => {
+            return [newString, ...prevStrings]
+          })
+          break
+        case ElevatorStatus.DOORS_OPENING:
+          newString = `${
+            elevator.name
+          } is opening its doors on the ${getDisplayFloorNumber(
+            elevator.currFloor
+          )} floor`
 
-        setElevatorStatusStrings((prevStrings) => {
-          return [newString, ...prevStrings]
-        })
+          setElevatorStatusStrings((prevStrings) => {
+            return [newString, ...prevStrings]
+          })
 
-        return
+          break
       }
     }
 
@@ -127,8 +129,8 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
             )} floor`
             break
 
-          case UserStatus.WAITING_ON_ELEVATOR:
-            statusString = `${name} clicked the button.  They are now waiting on the elevator.  They are on the ${getDisplayFloorNumber(
+          case UserStatus.WAITING_FOR_ELEVATOR:
+            statusString = `${name} clicked the button.  They are now waiting for the elevator.  They are on the ${getDisplayFloorNumber(
               currFloor
             )} floor and want to get to the ${getDisplayFloorNumber(
               destFloor
