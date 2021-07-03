@@ -15,8 +15,6 @@ export const ElevatorAdminView: FunctionComponent<ElevatorAdminViewProps> = ({
     // activeFloorRequest,
     addPeople,
     buildingName,
-    // elevators,
-    elevatorStatusStrings,
     elevatorUpdates,
     numFloors,
     numPeopleInBuilding,

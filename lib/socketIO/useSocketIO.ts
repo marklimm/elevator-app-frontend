@@ -5,17 +5,13 @@ import { getDisplayFloorNumber } from 'lib/FloorNumberConverter'
 
 import {
   NewConnectionBuildingResponse,
-  OkOrError,
-  REQUEST_ELEVATOR,
+  // OkOrError,
+  // REQUEST_ELEVATOR,
   StatusUpdateResponse,
   UserStatus,
 } from 'lib/BuildingActions'
 
-import UpdatesReducer, {
-  addUpdate,
-  initialState,
-  UpdatesState,
-} from './UpdatesReducer'
+import UpdatesReducer, { addUpdate, initialState } from './UpdatesReducer'
 
 import { ElevatorUpdate, ElevatorUpdateType } from 'lib/ElevatorEvents'
 
@@ -33,17 +29,11 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
   const [numFloors, setNumFloors] = useState(0)
   const [numPeopleInBuilding, setNumPeopleInBuilding] = useState(0)
 
-  const [elevatorStatusStrings, setElevatorStatusStrings] = useState<string[]>(
-    []
-  )
   const [statusStrings, setStatusStrings] = useState<string[]>([])
 
-  const [elevatorUpdates, dispatch] = useReducer<UpdatesState>(
-    UpdatesReducer,
-    initialState
-  )
+  const [elevatorUpdates, dispatch] = useReducer(UpdatesReducer, initialState)
 
-  const [activeFloorRequest, setActiveFloorRequest] = useState<number>()
+  // const [activeFloorRequest, setActiveFloorRequest] = useState<number>()
 
   useEffect(() => {
     //  connect to the server-side socketIO
@@ -147,61 +137,59 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
   //   socket.current.emit('elevator-directive', elevatorDirective)
   // }
 
-  const addPeople = () => {
-    socket.current.emit(
-      'increase-people',
-      25,
-      (response: NumPeopleUpdatedResponse) => {
-        console.log('response to increase-people', response)
+  // const addPeople = () => {
+  //   socket.current.emit(
+  //     'increase-people',
+  //     25,
+  //     (response: NumPeopleUpdatedResponse) => {
+  //       console.log('response to increase-people', response)
 
-        setNumPeopleInBuilding(response.numPeople)
-      }
-    )
-  }
+  //       setNumPeopleInBuilding(response.numPeople)
+  //     }
+  //   )
+  // }
 
-  const removePeople = () => {
-    socket.current.emit(
-      'decrease-people',
-      25,
-      (response: NumPeopleUpdatedResponse) => {
-        console.log('response to decrease-people', response)
+  // const removePeople = () => {
+  //   socket.current.emit(
+  //     'decrease-people',
+  //     25,
+  //     (response: NumPeopleUpdatedResponse) => {
+  //       console.log('response to decrease-people', response)
 
-        setNumPeopleInBuilding(response.numPeople)
-      }
-    )
-  }
+  //       setNumPeopleInBuilding(response.numPeople)
+  //     }
+  //   )
+  // }
 
-  const requestElevator = () => {
-    socket.current.emit(
-      REQUEST_ELEVATOR,
-      4,
-      (response: ElevatorRequestResponse) => {
-        console.log('response to elevator request', response)
+  // const requestElevator = () => {
+  //   socket.current.emit(
+  //     REQUEST_ELEVATOR,
+  //     4,
+  //     (response: ElevatorRequestResponse) => {
+  //       console.log('response to elevator request', response)
 
-        if (response.status === OkOrError.Error) {
-          console.log(
-            'oh no some error happened when trying to request the elevaotr!  Please try again later'
-          )
-          return
-        }
+  //       if (response.status === OkOrError.Error) {
+  //         console.log(
+  //           'oh no some error happened when trying to request the elevaotr!  Please try again later'
+  //         )
+  //         return
+  //       }
 
-        setActiveFloorRequest(response.destFloor)
-      }
-    )
-  }
+  //       setActiveFloorRequest(response.destFloor)
+  //     }
+  //   )
+  // }
 
   return {
-    activeFloorRequest,
-    addPeople,
+    // activeFloorRequest,
+    // addPeople,
     buildingName,
-    // elevators,
-    elevatorStatusStrings,
     elevatorUpdates,
     numFloors,
     numPeopleInBuilding,
     // goToFloor,
-    requestElevator,
-    removePeople,
+    // requestElevator,
+    // removePeople,
     statusStrings,
   }
 }
