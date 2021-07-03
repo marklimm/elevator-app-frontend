@@ -7,8 +7,6 @@ import {
   NewConnectionBuildingResponse,
   // OkOrError,
   // REQUEST_ELEVATOR,
-  StatusUpdateResponse,
-  UserStatus,
 } from 'lib/BuildingActions'
 
 import UpdatesReducer, {
@@ -21,7 +19,7 @@ import {
   ElevatorUpdateType,
   PersonUpdate,
   PersonUpdateType,
-} from 'lib/types/Events'
+} from 'lib/types/EventPayloads'
 
 /**
  * This custom hook allows a react component to send and receive messages from the server-side socketIO instance
