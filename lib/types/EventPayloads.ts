@@ -56,6 +56,7 @@ export type PersonUpdate = {
   person: PersonDTO
   elevator?: ElevatorDTO
   currFloor: number
+  destFloor?: number
 }
 
 export type ElevatorUpdate = {

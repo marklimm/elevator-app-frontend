@@ -124,21 +124,23 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
                 person.name
               } has just appeared.  They are on the ${getDisplayFloorNumber(
                 personUpdate.currFloor
-              )} floor and is requesting the elevator`,
+              )} floor`,
             })
           )
 
           break
 
-          // case PersonUpdateType.REQUESTING_ELEVATOR:
-          //   elevatorDispatch(
-          //     addUpdate({
-          //       id: person.personId,
-          //       text: `${person.name} on the ${getDisplayFloorNumber(
-          //         personUpdate.currFloor
-          //       )} floor and is requesting the elevator`,
-          //     })
-          //   )
+        case PersonUpdateType.REQUESTING_ELEVATOR:
+          personDispatch(
+            addUpdate({
+              id: person.personId,
+              text: `${person.name} on the ${getDisplayFloorNumber(
+                personUpdate.currFloor
+              )} floor is requesting the elevator.  They want to get to the ${getDisplayFloorNumber(
+                personUpdate.destFloor
+              )} floor `,
+            })
+          )
 
           break
       }
