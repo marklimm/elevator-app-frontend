@@ -7,7 +7,7 @@ export interface UpdatesState {
   [key: string]: string[]
 }
 
-export const initialState: UpdatesState = {}
+export const updatesInitialState: UpdatesState = {}
 
 export interface AnUpdate {
   id: string
@@ -16,7 +16,7 @@ export interface AnUpdate {
 
 const updatesSlice = createSlice({
   name: 'updates',
-  initialState,
+  initialState: updatesInitialState,
   reducers: {
     addUpdate(state, action: PayloadAction<AnUpdate>) {
       const id = action.payload.id

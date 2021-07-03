@@ -11,9 +11,17 @@ import {
   UserStatus,
 } from 'lib/BuildingActions'
 
-import UpdatesReducer, { addUpdate, initialState } from './UpdatesReducer'
+import UpdatesReducer, {
+  addUpdate,
+  updatesInitialState,
+} from './UpdatesReducer'
 
-import { ElevatorUpdate, ElevatorUpdateType } from 'lib/ElevatorEvents'
+import {
+  ElevatorUpdate,
+  ElevatorUpdateType,
+  PersonUpdate,
+  PersonUpdateType,
+} from 'lib/types/Events'
 
 /**
  * This custom hook allows a react component to send and receive messages from the server-side socketIO instance
@@ -31,7 +39,14 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
 
   const [statusStrings, setStatusStrings] = useState<string[]>([])
 
-  const [elevatorUpdates, dispatch] = useReducer(UpdatesReducer, initialState)
+  const [elevatorUpdates, elevatorDispatch] = useReducer(
+    UpdatesReducer,
+    updatesInitialState
+  )
+  const [peopleUpdates, personDispatch] = useReducer(
+    UpdatesReducer,
+    updatesInitialState
+  )
 
   // const [activeFloorRequest, setActiveFloorRequest] = useState<number>()
 
@@ -55,43 +70,75 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
       }
     )
 
-    const onStatusUpdate = (data: StatusUpdateResponse) => {
-      //  client has received a status update from the server
+    // const onStatusUpdate = (data: StatusUpdateResponse) => {
+    //   //  client has received a status update from the server
 
-      console.log('status-update', data)
-      setNumPeopleInBuilding(data.numPeople)
+    //   console.log('status-update', data)
+    //   setNumPeopleInBuilding(data.numPeople)
 
-      // responseStrs.push(`There are currently ${numPeople} in the building`)
+    //   // responseStrs.push(`There are currently ${numPeople} in the building`)
 
-      const newStatusStrings = data.users.map((user) => {
-        const { currFloor, destFloor, name, status } = user
+    //   const newStatusStrings = data.users.map((user) => {
+    //     const { currFloor, destFloor, name, status } = user
 
-        let statusString = ''
-        switch (status) {
-          case UserStatus.NEWLY_SPAWNED:
-            statusString = `${name} has just appeared.  They are on the ${getDisplayFloorNumber(
-              currFloor
-            )} floor and want to get to the ${getDisplayFloorNumber(
-              destFloor
-            )} floor`
-            break
+    //     let statusString = ''
+    //     switch (status) {
+    //       case UserStatus.NEWLY_SPAWNED:
+    //         statusString = `${name} has just appeared.  They are on the ${getDisplayFloorNumber(
+    //           currFloor
+    //         )} floor and want to get to the ${getDisplayFloorNumber(
+    //           destFloor
+    //         )} floor`
+    //         break
 
-          case UserStatus.WAITING_FOR_ELEVATOR:
-            statusString = `${name} clicked the button.  They are now waiting for the elevator.  They are on the ${getDisplayFloorNumber(
-              currFloor
-            )} floor and want to get to the ${getDisplayFloorNumber(
-              destFloor
-            )} floor`
+    //       case UserStatus.WAITING_FOR_ELEVATOR:
+    //         statusString = `${name} clicked the button.  They are now waiting for the elevator.  They are on the ${getDisplayFloorNumber(
+    //           currFloor
+    //         )} floor and want to get to the ${getDisplayFloorNumber(
+    //           destFloor
+    //         )} floor`
 
-            break
-        }
+    //         break
+    //     }
 
-        return `${statusString}`
-      })
+    //     return `${statusString}`
+    //   })
 
-      setStatusStrings((statusStrings) => {
-        return [...newStatusStrings, ...statusStrings]
-      })
+    //   setStatusStrings((statusStrings) => {
+    //     return [...newStatusStrings, ...statusStrings]
+    //   })
+    // }
+
+    const onPersonUpdate = (personUpdate: PersonUpdate) => {
+      const person = personUpdate.person
+
+      switch (personUpdate.type) {
+        case PersonUpdateType.NEWLY_SPAWNED:
+          personDispatch(
+            addUpdate({
+              id: person.personId,
+              text: `${
+                person.name
+              } has just appeared.  They are on the ${getDisplayFloorNumber(
+                personUpdate.currFloor
+              )} floor and is requesting the elevator`,
+            })
+          )
+
+          break
+
+          // case PersonUpdateType.REQUESTING_ELEVATOR:
+          //   elevatorDispatch(
+          //     addUpdate({
+          //       id: person.personId,
+          //       text: `${person.name} on the ${getDisplayFloorNumber(
+          //         personUpdate.currFloor
+          //       )} floor and is requesting the elevator`,
+          //     })
+          //   )
+
+          break
+      }
     }
 
     const onElevatorUpdate = (elevatorUpdate: ElevatorUpdate) => {
@@ -99,7 +146,7 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
 
       switch (elevatorUpdate.type) {
         case ElevatorUpdateType.OPENING_DOORS:
-          dispatch(
+          elevatorDispatch(
             addUpdate({
               id: elevator.elevatorId,
               text: `${elevator.name} has reached its destination and is opening its doors on floor ${elevatorUpdate.currFloor}`,
@@ -109,7 +156,7 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
           break
 
         case ElevatorUpdateType.MOVING_TO_FLOOR:
-          dispatch(
+          elevatorDispatch(
             addUpdate({
               id: elevator.elevatorId,
               text: `${elevator.name} has moved to floor ${elevatorUpdate.currFloor}`,
@@ -120,11 +167,11 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
       }
     }
 
-    socket.current.on('status-update', onStatusUpdate)
+    socket.current.on('person-update', onPersonUpdate)
     socket.current.on('elevator-update', onElevatorUpdate)
 
     return () => {
-      socket.current.off('status-update', onStatusUpdate)
+      socket.current.off('person-update', onPersonUpdate)
       socket.current.off('elevator-update', onElevatorUpdate)
     }
   }, [])
@@ -190,6 +237,6 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
     // goToFloor,
     // requestElevator,
     // removePeople,
-    statusStrings,
+    peopleUpdates,
   }
 }
