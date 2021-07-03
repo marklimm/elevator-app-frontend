@@ -3,7 +3,7 @@ import { GetStaticProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 
-import { Building } from 'components/Building/Building'
+import { ElevatorAdminView } from 'components/Building/ElevatorAdminView'
 
 // import { ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
@@ -45,7 +45,7 @@ const HomePage: FunctionComponent<HomePageProps> = ({
           <a>Developer Blog</a>
         </Link>
         <div className='m-3'>
-          <Building socketIOUrl={socketIOUrl} />
+          <ElevatorAdminView socketIOUrl={socketIOUrl} />
         </div>
       </div>
       {/* 

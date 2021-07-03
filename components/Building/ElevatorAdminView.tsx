@@ -1,21 +1,15 @@
 import React, { FunctionComponent } from 'react'
 
 import { useSocketIO } from 'lib/socketIO/useSocketIO'
-import { DisplayDate } from 'components/DisplayDate/DisplayDate'
+import { ElevatorRow } from './ElevatorRow'
 
-interface BuildingProps {
+interface ElevatorAdminViewProps {
   socketIOUrl: string
 }
 
-// const range = (start, end) => {
-//   return Array(end - start + 1)
-//     .fill()
-//     .map((_, idx) => start + idx)
-// }
-
-export const Building: FunctionComponent<BuildingProps> = ({
+export const ElevatorAdminView: FunctionComponent<ElevatorAdminViewProps> = ({
   socketIOUrl,
-}: BuildingProps) => {
+}: ElevatorAdminViewProps) => {
   //  setup the connection to the server-side socket io instance
   const {
     // activeFloorRequest,
@@ -32,23 +26,6 @@ export const Building: FunctionComponent<BuildingProps> = ({
     statusStrings,
   } = useSocketIO(socketIOUrl)
 
-  // const buttonPressed = (elevatorName = '', destFloor = 1) => {
-  //   console.log('floorClicked : destFloor', destFloor)
-
-  //   goToFloor({
-  //     name: elevatorName,
-  //     destFloor,
-  //   })
-  // }
-
-  // const elevatorsArr = Object.keys(elevators).map((key) => elevators[key])
-
-  // const elevatorButtons = range(1, 5)
-
-  console.log('elevatorUpdates', elevatorUpdates)
-
-  const elevatorKeys = Object.keys(elevatorUpdates)
-
   return (
     <>
       <div className='text-xl font-bold'>{buildingName}</div>
@@ -61,46 +38,12 @@ export const Building: FunctionComponent<BuildingProps> = ({
       <button onClick={addPeople}>Add people</button>
       <br />
       <button onClick={removePeople}>Remove people</button>
-      <div>
-        {elevatorKeys.length === 0 && (
-          <span>There are currently no elevators</span>
-        )}
-
-        {elevatorKeys.length > 0 && (
-          <div className='flex mt-3'>
-            {elevatorKeys.map((key) => {
-              const elevatorUpdatesArr = elevatorUpdates[key]
-
-              return (
-                <div key={key} className='p-3 w-1/2'>
-                  <div className='text-2xl'>Updates for {key}</div>
-
-                  {elevatorUpdatesArr.length > 0 &&
-                    elevatorUpdatesArr.map((elevatorUpdateText) => (
-                      <div key={elevatorUpdateText}>{elevatorUpdateText}</div>
-                    ))}
-                </div>
-              )
-            })}
-          </div>
-        )}
-      </div>
-      <hr />
+      <ElevatorRow elevatorUpdates={elevatorUpdates} />
       <div className='flex mt-3'>
         <div className='p-3 w-1/2'>
           <h1 className='text-xl'>People updates:</h1>
           {statusStrings.length > 0 &&
             statusStrings.map((str, index) => (
-              <div key={index} className='mb-2'>
-                {str}
-              </div>
-            ))}
-        </div>
-
-        <div className='p-3 w-1/2'>
-          <h1 className='text-xl'>Elevator updates:</h1>
-          {elevatorStatusStrings.length > 0 &&
-            elevatorStatusStrings.map((str, index) => (
               <div key={index} className='mb-2'>
                 {str}
               </div>
@@ -155,5 +98,3 @@ export const Building: FunctionComponent<BuildingProps> = ({
     </>
   )
 }
-
-export default Building
