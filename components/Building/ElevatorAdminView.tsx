@@ -3,7 +3,7 @@ import React, { FunctionComponent } from 'react'
 import { useSocketIO } from 'lib/socketIO/useSocketIO'
 
 import { ElevatorRow } from './ElevatorRow'
-import { PeopleRow } from './PeopleRow'
+import { PeopleRowMemo } from './PeopleRow'
 
 interface ElevatorAdminViewProps {
   socketIOUrl: string
@@ -34,7 +34,7 @@ export const ElevatorAdminView: FunctionComponent<ElevatorAdminViewProps> = ({
       <br />
       <button onClick={removePeople}>Remove people</button> */}
       <ElevatorRow elevatorUpdates={elevatorUpdates} />
-      <PeopleRow peopleUpdates={peopleUpdates} />
+      <PeopleRowMemo peopleUpdates={peopleUpdates} />
       {/* {activeFloorRequest && (
         <span className='text-lg'>
           There is an active floor request to go to floor: {activeFloorRequest}
