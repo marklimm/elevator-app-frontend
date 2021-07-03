@@ -1,7 +1,7 @@
-import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 /**
- *
+ * A key-value mapping of {elevatorId/userId}: an array of log messages for the elevator/user in question
  */
 export interface UpdatesState {
   [key: string]: string[]
@@ -27,8 +27,6 @@ const updatesSlice = createSlice({
       }
 
       state[id].unshift(text)
-
-      console.log('after a message has been added: state[id]', state[id])
     },
   },
 })
