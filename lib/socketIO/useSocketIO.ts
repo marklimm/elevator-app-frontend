@@ -1,26 +1,23 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useReducer, useState } from 'react'
 import { io, Socket } from 'socket.io-client'
 
 import { getDisplayFloorNumber } from 'lib/FloorNumberConverter'
 
 import {
-  Direction,
-  // ElevatorRequestResponse,
-  ElevatorStatus,
-  ElevatorStatusUpdate,
   NewConnectionBuildingResponse,
-  // NumPeopleUpdatedResponse,
   OkOrError,
   REQUEST_ELEVATOR,
   StatusUpdateResponse,
   UserStatus,
 } from 'lib/BuildingActions'
 
-// type UseSocketIOReturnType = BuildingState & {
-//   // elevators: null,
-//   // numFloors: number,
-//   sendMessage: (message: StatusMessage) => void
-// }
+import UpdatesReducer, {
+  addUpdate,
+  initialState,
+  UpdatesState,
+} from './UpdatesReducer'
+
+import { ElevatorUpdate, ElevatorUpdateType } from 'lib/ElevatorEvents'
 
 /**
  * This custom hook allows a react component to send and receive messages from the server-side socketIO instance
@@ -41,8 +38,12 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
   )
   const [statusStrings, setStatusStrings] = useState<string[]>([])
 
+  const [elevatorUpdates, dispatch] = useReducer<UpdatesState>(
+    UpdatesReducer,
+    initialState
+  )
+
   const [activeFloorRequest, setActiveFloorRequest] = useState<number>()
-  // const [statusMessages, setStatusMessages] = useState<string[]>([])
 
   useEffect(() => {
     //  connect to the server-side socketIO
@@ -60,53 +61,9 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
         setNumPeopleInBuilding(response.numPeople)
         setNumFloors(response.numFloors)
 
-        // setElevators(response.elevators)
-
-        // setElevators(buildingState.elevators)
         //  now connected to socket.io
       }
     )
-
-    // socket.current.on(
-    //   ELEVATOR_STATUS,
-    //   (response: ElevatorTakingRequestResponse) => {
-    //     response.message
-
-    //     setNumPeopleInBuilding(message.numPeopleInBuilding)
-    //   }
-    // )
-
-    const onElevatorUpdate = ({ elevator }: ElevatorStatusUpdate) => {
-      let newString = ''
-
-      switch (elevator.status) {
-        case ElevatorStatus.MOVING:
-          newString = `${
-            elevator.name
-          } has moved to the ${getDisplayFloorNumber(
-            elevator.currFloor
-          )} floor and is moving ${
-            elevator.direction === Direction.GOING_UP ? 'up' : 'down'
-          } towards the ${getDisplayFloorNumber(elevator.destFloor)} floor`
-
-          setElevatorStatusStrings((prevStrings) => {
-            return [newString, ...prevStrings]
-          })
-          break
-        case ElevatorStatus.DOORS_OPENING:
-          newString = `${
-            elevator.name
-          } is opening its doors on the ${getDisplayFloorNumber(
-            elevator.currFloor
-          )} floor`
-
-          setElevatorStatusStrings((prevStrings) => {
-            return [newString, ...prevStrings]
-          })
-
-          break
-      }
-    }
 
     const onStatusUpdate = (data: StatusUpdateResponse) => {
       //  client has received a status update from the server
@@ -145,6 +102,32 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
       setStatusStrings((statusStrings) => {
         return [...newStatusStrings, ...statusStrings]
       })
+    }
+
+    const onElevatorUpdate = (elevatorUpdate: ElevatorUpdate) => {
+      const elevator = elevatorUpdate.elevator
+
+      switch (elevatorUpdate.type) {
+        case ElevatorUpdateType.OPENING_DOORS:
+          dispatch(
+            addUpdate({
+              id: elevator.elevatorId,
+              text: `${elevator.name} has reached its destination and is opening its doors on floor ${elevatorUpdate.currFloor}`,
+            })
+          )
+
+          break
+
+        case ElevatorUpdateType.MOVING_TO_FLOOR:
+          dispatch(
+            addUpdate({
+              id: elevator.elevatorId,
+              text: `${elevator.name} has moved to floor ${elevatorUpdate.currFloor}`,
+            })
+          )
+
+          break
+      }
     }
 
     socket.current.on('status-update', onStatusUpdate)
@@ -213,6 +196,7 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
     buildingName,
     // elevators,
     elevatorStatusStrings,
+    elevatorUpdates,
     numFloors,
     numPeopleInBuilding,
     // goToFloor,

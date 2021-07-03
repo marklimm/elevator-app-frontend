@@ -23,6 +23,7 @@ export const Building: FunctionComponent<BuildingProps> = ({
     buildingName,
     // elevators,
     elevatorStatusStrings,
+    elevatorUpdates,
     numFloors,
     numPeopleInBuilding,
     // goToFloor,
@@ -44,6 +45,10 @@ export const Building: FunctionComponent<BuildingProps> = ({
 
   // const elevatorButtons = range(1, 5)
 
+  console.log('elevatorUpdates', elevatorUpdates)
+
+  const elevatorKeys = Object.keys(elevatorUpdates)
+
   return (
     <>
       <div className='text-xl font-bold'>{buildingName}</div>
@@ -56,6 +61,31 @@ export const Building: FunctionComponent<BuildingProps> = ({
       <button onClick={addPeople}>Add people</button>
       <br />
       <button onClick={removePeople}>Remove people</button>
+      <div>
+        {elevatorKeys.length === 0 && (
+          <span>There are currently no elevators</span>
+        )}
+
+        {elevatorKeys.length > 0 && (
+          <div className='flex mt-3'>
+            {elevatorKeys.map((key) => {
+              const elevatorUpdatesArr = elevatorUpdates[key]
+
+              return (
+                <div key={key} className='p-3 w-1/2'>
+                  <div className='text-2xl'>Updates for {key}</div>
+
+                  {elevatorUpdatesArr.length > 0 &&
+                    elevatorUpdatesArr.map((elevatorUpdateText) => (
+                      <div key={elevatorUpdateText}>{elevatorUpdateText}</div>
+                    ))}
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+      <hr />
       <div className='flex mt-3'>
         <div className='p-3 w-1/2'>
           <h1 className='text-xl'>People updates:</h1>
