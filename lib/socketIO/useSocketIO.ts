@@ -12,6 +12,7 @@ import {
 import UpdatesReducer, {
   addUpdate,
   updatesInitialState,
+  UpdatesState,
 } from './UpdatesReducer'
 
 import {
@@ -20,6 +21,13 @@ import {
   PersonUpdate,
   PersonUpdateType,
 } from 'lib/types/EventPayloads'
+
+interface UseSocketIOReturnType {
+  buildingName: string
+  elevatorUpdates: UpdatesState
+  numFloors: number
+  peopleUpdates: UpdatesState
+}
 
 /**
  * This custom hook allows a react component to send and receive messages from the server-side socketIO instance
@@ -33,9 +41,7 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
   // const [elevators, setElevators] = useState<string>([])
 
   const [numFloors, setNumFloors] = useState(0)
-  const [numPeopleInBuilding, setNumPeopleInBuilding] = useState(0)
-
-  const [statusStrings, setStatusStrings] = useState<string[]>([])
+  // const [numPeopleInBuilding, setNumPeopleInBuilding] = useState(0)
 
   const [elevatorUpdates, elevatorDispatch] = useReducer(
     UpdatesReducer,
@@ -61,7 +67,6 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
         // console.log('newConnectionAck : buildingState', buildingState)
 
         setBuildingName(response.name)
-        setNumPeopleInBuilding(response.numPeople)
         setNumFloors(response.numFloors)
 
         //  now connected to socket.io
@@ -226,15 +231,9 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
   // }
 
   return {
-    // activeFloorRequest,
-    // addPeople,
     buildingName,
     elevatorUpdates,
     numFloors,
-    numPeopleInBuilding,
-    // goToFloor,
-    // requestElevator,
-    // removePeople,
     peopleUpdates,
   }
 }
