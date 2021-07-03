@@ -1,9 +1,10 @@
 import React, { FunctionComponent } from 'react'
 
 import { ElevatorUpdatesMemo } from './ElevatorUpdates'
+import { UpdatesState } from 'lib/socketIO/UpdatesReducer'
 
 interface ElevatorRowProps {
-  elevatorUpdates: string[]
+  elevatorUpdates: UpdatesState
 }
 
 export const ElevatorRow: FunctionComponent<ElevatorRowProps> = ({

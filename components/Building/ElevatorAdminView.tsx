@@ -1,7 +1,9 @@
 import React, { FunctionComponent } from 'react'
 
 import { useSocketIO } from 'lib/socketIO/useSocketIO'
+
 import { ElevatorRow } from './ElevatorRow'
+import { PeopleRow } from './PeopleRow'
 
 interface ElevatorAdminViewProps {
   socketIOUrl: string
@@ -12,54 +14,27 @@ export const ElevatorAdminView: FunctionComponent<ElevatorAdminViewProps> = ({
 }: ElevatorAdminViewProps) => {
   //  setup the connection to the server-side socket io instance
   const {
-    // activeFloorRequest,
-    addPeople,
     buildingName,
     elevatorUpdates,
-    numFloors,
-    numPeopleInBuilding,
     // goToFloor,
     // requestElevator,
-    removePeople,
-    statusStrings,
+    peopleUpdates,
   } = useSocketIO(socketIOUrl)
 
   return (
     <>
       <div className='text-xl font-bold'>{buildingName}</div>
-      There are currently {numPeopleInBuilding} people in the building
+      {/* There are currently {numPeopleInBuilding} people in the building
       <br />
       <br />
-      {/* <button onClick={buttonClicked}>Send realtime message to server</button> */}
+      <button onClick={buttonClicked}>Send realtime message to server</button>
       The building has {numFloors} floors
       <br />
       <button onClick={addPeople}>Add people</button>
       <br />
-      <button onClick={removePeople}>Remove people</button>
+      <button onClick={removePeople}>Remove people</button> */}
       <ElevatorRow elevatorUpdates={elevatorUpdates} />
-      <div className='flex mt-3'>
-        <div className='p-3 w-1/2'>
-          <h1 className='text-xl'>People updates:</h1>
-          {statusStrings.length > 0 &&
-            statusStrings.map((str, index) => (
-              <div key={index} className='mb-2'>
-                {str}
-              </div>
-            ))}
-        </div>
-      </div>
-      {/* <button onClick={requestElevator}>Request Elevator</button>
-      <br />
-      {elevators.length > 0 && (
-        <div className='flex'>
-          {elevators.map((elevator) => (
-            <div key={elevator} className='m-4'>
-              <div className='text-lg'>{elevator}</div>
-              <div>messages about this specific elevator</div>
-            </div>
-          ))}
-        </div>
-      )} */}
+      <PeopleRow peopleUpdates={peopleUpdates} />
       {/* {activeFloorRequest && (
         <span className='text-lg'>
           There is an active floor request to go to floor: {activeFloorRequest}
