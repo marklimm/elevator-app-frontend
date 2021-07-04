@@ -26,7 +26,9 @@ const updatesSlice = createSlice({
         state[id] = []
       }
 
-      state[id].unshift(text)
+      const date = `${Date.now()}`
+
+      state[id].unshift(`[${date}]: ${text}`)
     },
   },
 })

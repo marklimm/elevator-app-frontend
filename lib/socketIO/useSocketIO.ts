@@ -3,12 +3,6 @@ import { io, Socket } from 'socket.io-client'
 
 import { getDisplayFloorNumber } from 'lib/FloorNumberConverter'
 
-import {
-  NewConnectionBuildingResponse,
-  // OkOrError,
-  // REQUEST_ELEVATOR,
-} from 'lib/BuildingActions'
-
 import UpdatesReducer, {
   addUpdate,
   updatesInitialState,
@@ -16,10 +10,11 @@ import UpdatesReducer, {
 } from './UpdatesReducer'
 
 import {
+  ElevatorStatus,
   ElevatorUpdate,
-  ElevatorUpdateType,
+  NewConnectionBuildingResponse,
   PersonUpdate,
-  PersonUpdateType,
+  PersonStatus,
 } from 'lib/types/EventPayloads'
 
 interface UseSocketIOReturnType {
@@ -73,50 +68,11 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
       }
     )
 
-    // const onStatusUpdate = (data: StatusUpdateResponse) => {
-    //   //  client has received a status update from the server
-
-    //   console.log('status-update', data)
-    //   setNumPeopleInBuilding(data.numPeople)
-
-    //   // responseStrs.push(`There are currently ${numPeople} in the building`)
-
-    //   const newStatusStrings = data.users.map((user) => {
-    //     const { currFloor, destFloor, name, status } = user
-
-    //     let statusString = ''
-    //     switch (status) {
-    //       case UserStatus.NEWLY_SPAWNED:
-    //         statusString = `${name} has just appeared.  They are on the ${getDisplayFloorNumber(
-    //           currFloor
-    //         )} floor and want to get to the ${getDisplayFloorNumber(
-    //           destFloor
-    //         )} floor`
-    //         break
-
-    //       case UserStatus.WAITING_FOR_ELEVATOR:
-    //         statusString = `${name} clicked the button.  They are now waiting for the elevator.  They are on the ${getDisplayFloorNumber(
-    //           currFloor
-    //         )} floor and want to get to the ${getDisplayFloorNumber(
-    //           destFloor
-    //         )} floor`
-
-    //         break
-    //     }
-
-    //     return `${statusString}`
-    //   })
-
-    //   setStatusStrings((statusStrings) => {
-    //     return [...newStatusStrings, ...statusStrings]
-    //   })
-    // }
-
     const onPersonUpdate = (personUpdate: PersonUpdate) => {
       const person = personUpdate.person
 
       switch (personUpdate.type) {
-        case PersonUpdateType.NEWLY_SPAWNED:
+        case PersonStatus.NEWLY_SPAWNED:
           personDispatch(
             addUpdate({
               id: person.personId,
@@ -130,7 +86,7 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
 
           break
 
-        case PersonUpdateType.REQUESTING_ELEVATOR:
+        case PersonStatus.WAITING_FOR_ELEVATOR:
           personDispatch(
             addUpdate({
               id: person.personId,
@@ -150,9 +106,9 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
       const elevator = elevatorUpdate.elevator
 
       console.log('receiving elevator update', elevatorUpdate.type)
-      
+
       switch (elevatorUpdate.type) {
-        case ElevatorUpdateType.TAKING_REQUEST:
+        case ElevatorStatus.RECEIVED_REQUEST: {
           elevatorDispatch(
             addUpdate({
               id: elevator.elevatorId,
@@ -165,8 +121,9 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
           )
 
           break
+        }
 
-        case ElevatorUpdateType.OPENING_DOORS:
+        case ElevatorStatus.DOORS_OPENING: {
           elevatorDispatch(
             addUpdate({
               id: elevator.elevatorId,
@@ -175,8 +132,27 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
           )
 
           break
+        }
 
-        case ElevatorUpdateType.MOVING_TO_FLOOR:
+        case ElevatorStatus.RECEIVED_DESTINATION: {
+          const personWhoGaveDestination =
+            elevatorUpdate.people[elevatorUpdate.people.length - 1]
+
+          elevatorDispatch(
+            addUpdate({
+              id: elevator.elevatorId,
+              text: `${personWhoGaveDestination.name} got into ${
+                elevator.name
+              } and pressed the button to go to the ${getDisplayFloorNumber(
+                elevatorUpdate.destFloor
+              )} floor`,
+            })
+          )
+
+          break
+        }
+
+        case ElevatorStatus.MOVING_TO_FLOOR: {
           elevatorDispatch(
             addUpdate({
               id: elevator.elevatorId,
@@ -185,6 +161,7 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
           )
 
           break
+        }
       }
     }
 
