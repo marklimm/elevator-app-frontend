@@ -136,9 +136,9 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
               id: person.personId,
               text: `${person.name} on the ${getDisplayFloorNumber(
                 personUpdate.currFloor
-              )} floor is requesting the elevator.  They want to get to the ${getDisplayFloorNumber(
+              )} floor is requested the elevator.  (They want to get to the ${getDisplayFloorNumber(
                 personUpdate.destFloor
-              )} floor `,
+              )} floor)`,
             })
           )
 
@@ -149,7 +149,23 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
     const onElevatorUpdate = (elevatorUpdate: ElevatorUpdate) => {
       const elevator = elevatorUpdate.elevator
 
+      console.log('receiving elevator update', elevatorUpdate.type)
+      
       switch (elevatorUpdate.type) {
+        case ElevatorUpdateType.TAKING_REQUEST:
+          elevatorDispatch(
+            addUpdate({
+              id: elevator.elevatorId,
+              text: `${
+                elevator.name
+              } is taking the request and will head to the ${getDisplayFloorNumber(
+                elevatorUpdate.destFloor
+              )} floor`,
+            })
+          )
+
+          break
+
         case ElevatorUpdateType.OPENING_DOORS:
           elevatorDispatch(
             addUpdate({
