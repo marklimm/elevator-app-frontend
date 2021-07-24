@@ -108,13 +108,26 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
       console.log('receiving elevator update', elevatorUpdate.type)
 
       switch (elevatorUpdate.type) {
+        case ElevatorStatus.READY: {
+          elevatorDispatch(
+            addUpdate({
+              id: elevator.elevatorId,
+              text: `${elevator.name} is ready on the ${getDisplayFloorNumber(
+                elevatorUpdate.currFloor
+              )} floor and waiting to take a request `,
+            })
+          )
+
+          break
+        }
+
         case ElevatorStatus.RECEIVED_REQUEST: {
           elevatorDispatch(
             addUpdate({
               id: elevator.elevatorId,
               text: `${
                 elevator.name
-              } is taking the request and will head to the ${getDisplayFloorNumber(
+              } is taking the request to go to the ${getDisplayFloorNumber(
                 elevatorUpdate.destFloor
               )} floor`,
             })
