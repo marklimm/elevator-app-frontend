@@ -19,6 +19,7 @@ export const ElevatorAdminView: FunctionComponent<ElevatorAdminViewProps> = ({
     // goToFloor,
     // requestElevator,
     peopleUpdates,
+    spawnNewPerson,
   } = useSocketIO(socketIOUrl)
 
   return (
@@ -35,6 +36,13 @@ export const ElevatorAdminView: FunctionComponent<ElevatorAdminViewProps> = ({
       <button onClick={removePeople}>Remove people</button> */}
       <ElevatorRow elevatorUpdates={elevatorUpdates} />
       <PeopleRowMemo peopleUpdates={peopleUpdates} />
+
+      <div className='mt-3'>
+        <button className='bg-blue-400 text-white p-2' onClick={spawnNewPerson}>
+          Add New Person
+        </button>
+      </div>
+
       {/* {activeFloorRequest && (
         <span className='text-lg'>
           There is an active floor request to go to floor: {activeFloorRequest}

@@ -34,7 +34,7 @@ export interface PersonDTO {
 
 export enum PersonStatus {
   NEWLY_SPAWNED = 'newly-spawned',
-  WAITING_FOR_ELEVATOR = 'waiting-for-elevator',
+  REQUESTED_ELEVATOR = 'requested-elevator',
   ENTERED_THE_ELEVATOR = 'entered-the-elevator',
   PRESSES_BUTTON = 'presses-button',
   IN_THE_ELEVATOR = 'in-the-elevator',
@@ -67,4 +67,8 @@ export type ElevatorUpdate = {
   elevator: ElevatorDTO
   currFloor: number
   destFloor?: number
+}
+
+export enum ClientCommands {
+  SPAWN_NEW_PERSON = 'spawn-new-person',
 }

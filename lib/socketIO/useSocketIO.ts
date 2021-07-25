@@ -10,6 +10,7 @@ import UpdatesReducer, {
 } from './UpdatesReducer'
 
 import {
+  ClientCommands,
   ElevatorStatus,
   ElevatorUpdate,
   NewConnectionBuildingResponse,
@@ -22,6 +23,7 @@ interface UseSocketIOReturnType {
   elevatorUpdates: UpdatesState
   numFloors: number
   peopleUpdates: UpdatesState
+  spawnNewPerson: () => void
 }
 
 /**
@@ -86,13 +88,13 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
 
           break
 
-        case PersonStatus.WAITING_FOR_ELEVATOR:
+        case PersonStatus.REQUESTED_ELEVATOR:
           personDispatch(
             addUpdate({
               id: person.personId,
               text: `${person.name} on the ${getDisplayFloorNumber(
                 personUpdate.currFloor
-              )} floor is requested the elevator.  (They want to get to the ${getDisplayFloorNumber(
+              )} floor has requested the elevator.  (They want to get to the ${getDisplayFloorNumber(
                 personUpdate.destFloor
               )} floor)`,
             })
@@ -195,17 +197,19 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
   //   socket.current.emit('elevator-directive', elevatorDirective)
   // }
 
-  // const addPeople = () => {
-  //   socket.current.emit(
-  //     'increase-people',
-  //     25,
-  //     (response: NumPeopleUpdatedResponse) => {
-  //       console.log('response to increase-people', response)
+  const spawnNewPerson = () => {
+    socket.current.emit(
+      ClientCommands.SPAWN_NEW_PERSON,
+      'Client CreatedPerson',
+      (response: PersonUpdate) => {
+        console.log('response to spawnnewperson', response)
 
-  //       setNumPeopleInBuilding(response.numPeople)
-  //     }
-  //   )
-  // }
+        //  toastr message ?
+
+        // setNumPeopleInBuilding(response.numPeople)
+      }
+    )
+  }
 
   // const removePeople = () => {
   //   socket.current.emit(
@@ -243,5 +247,6 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
     elevatorUpdates,
     numFloors,
     peopleUpdates,
+    spawnNewPerson,
   }
 }
