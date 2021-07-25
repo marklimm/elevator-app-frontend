@@ -121,7 +121,7 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
           break
         }
 
-        case ElevatorStatus.RECEIVED_REQUEST: {
+        case ElevatorStatus.TOOK_REQUEST: {
           elevatorDispatch(
             addUpdate({
               id: elevator.elevatorId,
