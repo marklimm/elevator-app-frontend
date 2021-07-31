@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from 'react'
 
 interface NewPersonFormProps {
-  onSpawnNewPerson: () => void
+  onSpawnNewPerson: (string) => void
 }
 
 /**
@@ -18,10 +18,10 @@ export const NewPersonForm: FunctionComponent<NewPersonFormProps> = ({
   const onNewPersonNameTextChange = (
     event: React.FormEvent<HTMLInputElement>
   ) => {
-    setNewPersonName(event.target.value)
+    setNewPersonName(event.currentTarget.value)
   }
 
-  const formSubmitted = (event: React.FormEvent<HTMLInputElement>) => {
+  const formSubmitted = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     onSpawnNewPerson(newPersonName)

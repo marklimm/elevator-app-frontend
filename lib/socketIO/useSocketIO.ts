@@ -199,7 +199,7 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
 
   /**
    * Send a web socket message to the server to spawn a new person
-   * @param newPersonName 
+   * @param newPersonName
    */
   const spawnNewPerson = (newPersonName = 'John Doe') => {
     event.preventDefault()
