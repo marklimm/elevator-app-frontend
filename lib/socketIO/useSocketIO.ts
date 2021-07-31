@@ -197,16 +197,18 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
   //   socket.current.emit('elevator-directive', elevatorDirective)
   // }
 
-  const spawnNewPerson = () => {
+  /**
+   * Send a web socket message to the server to spawn a new person
+   * @param newPersonName 
+   */
+  const spawnNewPerson = (newPersonName = 'John Doe') => {
+    event.preventDefault()
+
     socket.current.emit(
       ClientCommands.SPAWN_NEW_PERSON,
-      'Client CreatedPerson',
+      newPersonName,
       (response: PersonUpdate) => {
-        console.log('response to spawnnewperson', response)
-
-        //  toastr message ?
-
-        // setNumPeopleInBuilding(response.numPeople)
+        console.log('server response to spawnnewperson', response)
       }
     )
   }

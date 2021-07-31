@@ -4,6 +4,7 @@ import { useSocketIO } from 'lib/socketIO/useSocketIO'
 
 import { ElevatorRow } from './ElevatorRow'
 import { PeopleRowMemo } from './PeopleRow'
+import { NewPersonForm } from './NewPersonForm'
 
 interface ElevatorAdminViewProps {
   socketIOUrl: string
@@ -37,11 +38,7 @@ export const ElevatorAdminView: FunctionComponent<ElevatorAdminViewProps> = ({
       <ElevatorRow elevatorUpdates={elevatorUpdates} />
       <PeopleRowMemo peopleUpdates={peopleUpdates} />
 
-      <div className='mt-3'>
-        <button className='bg-blue-400 text-white p-2' onClick={spawnNewPerson}>
-          Add New Person
-        </button>
-      </div>
+      <NewPersonForm onSpawnNewPerson={spawnNewPerson} />
 
       {/* {activeFloorRequest && (
         <span className='text-lg'>
