@@ -15,7 +15,9 @@ export const PeopleRow: FunctionComponent<PeopleRowProps> = ({
   return (
     <>
       <div>
-        {personIds.length === 0 && <span>There are currently no people</span>}
+        {personIds.length === 0 && (
+          <span>No people updates have been received yet</span>
+        )}
 
         {personIds.length > 0 && (
           <div className='flex mt-3'>

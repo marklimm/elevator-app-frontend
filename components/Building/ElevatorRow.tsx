@@ -16,7 +16,7 @@ export const ElevatorRow: FunctionComponent<ElevatorRowProps> = ({
     <>
       <div>
         {elevatorIds.length === 0 && (
-          <span>There are currently no elevators</span>
+          <span>No elevator updates have been received yet</span>
         )}
 
         {elevatorIds.length > 0 && (

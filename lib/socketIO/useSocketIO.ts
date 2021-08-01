@@ -24,7 +24,10 @@ interface UseSocketIOReturnType {
   elevatorUpdates: UpdatesState
   numFloors: number
   peopleUpdates: UpdatesState
-  spawnNewPerson: () => void
+  spawnNewPerson: (
+    string,
+    onResponse: (personUpdateResponse: PersonUpdateResponse) => void
+  ) => void
 }
 
 /**
@@ -228,15 +231,16 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
    * Send a web socket message to the server to spawn a new person
    * @param newPersonName
    */
-  const spawnNewPerson = (newPersonName = 'John Doe') => {
+  const spawnNewPerson = (
+    newPersonName = 'John Doe',
+    onResponse: (personUpdateResponse: PersonUpdateResponse) => void
+  ) => {
     event.preventDefault()
 
     socket.current.emit(
       ClientCommands.SPAWN_NEW_PERSON,
       newPersonName,
-      (personUpdateResponse: PersonUpdateResponse) => {
-        console.log('server response to spawnnewperson', personUpdateResponse)
-      }
+      onResponse
     )
   }
 

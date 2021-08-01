@@ -1,7 +1,13 @@
 import React, { FunctionComponent, useState } from 'react'
 
+import { OkOrError, PersonUpdateResponse } from 'lib/types/ElevatorAppTypes'
+import { ConfirmationMessage } from 'components/ConfirmationMessage/ConfirmationMessage'
+
 interface NewPersonFormProps {
-  onSpawnNewPerson: (string) => void
+  onSpawnNewPerson: (
+    string,
+    onResponse: (personUpdateResponse: PersonUpdateResponse) => void
+  ) => void
 }
 
 /**
@@ -13,7 +19,10 @@ export const NewPersonForm: FunctionComponent<NewPersonFormProps> = ({
   onSpawnNewPerson,
 }: NewPersonFormProps) => {
   const [newPersonName, setNewPersonName] = useState<string>('')
+
   const [confirmationMessage, setConfirmationMessage] = useState<string>('')
+  const [confirmationMessageStatus, setConfirmationMessageStatus] =
+    useState<OkOrError>(OkOrError.Ok)
 
   const onNewPersonNameTextChange = (
     event: React.FormEvent<HTMLInputElement>
@@ -24,16 +33,35 @@ export const NewPersonForm: FunctionComponent<NewPersonFormProps> = ({
   const formSubmitted = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
-    onSpawnNewPerson(newPersonName)
-
     //  show a confirmation message and hide it after a few seconds
-    setConfirmationMessage(`${newPersonName} has been spawned!`)
-    setTimeout(() => {
-      setConfirmationMessage('')
-    }, 5000)
+    setConfirmationMessage(`Attempting to spawn ${newPersonName} ...`)
 
-    //  reset the textbox
-    setNewPersonName('')
+    onSpawnNewPerson(
+      newPersonName,
+      (personUpdateResponse: PersonUpdateResponse) => {
+        console.log('server response to spawnnewperson', personUpdateResponse)
+
+        if (
+          personUpdateResponse.error ||
+          personUpdateResponse.status === OkOrError.Error
+        ) {
+          console.error(
+            `An error was returned from the server: ${personUpdateResponse.error}`
+          )
+
+          setConfirmationMessage(personUpdateResponse.error)
+          setConfirmationMessageStatus(OkOrError.Error)
+
+          return
+        }
+
+        setConfirmationMessage(`${newPersonName} was spawned!`)
+        setConfirmationMessageStatus(OkOrError.Ok)
+
+        //  reset the textbox
+        setNewPersonName('')
+      }
+    )
   }
 
   return (
@@ -59,7 +87,10 @@ export const NewPersonForm: FunctionComponent<NewPersonFormProps> = ({
       </form>
 
       {confirmationMessage.length > 0 && (
-        <div className=' text-green-600 mt-3'>{confirmationMessage}</div>
+        <ConfirmationMessage
+          status={confirmationMessageStatus}
+          message={confirmationMessage}
+        />
       )}
     </>
   )
