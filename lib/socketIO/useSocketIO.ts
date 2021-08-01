@@ -12,11 +12,12 @@ import UpdatesReducer, {
 import {
   ClientCommands,
   ElevatorStatus,
-  ElevatorUpdate,
+  ElevatorUpdateResponse,
   NewConnectionBuildingResponse,
-  PersonUpdate,
+  OkOrError,
   PersonStatus,
-} from 'lib/types/EventPayloads'
+  PersonUpdateResponse,
+} from 'lib/types/ElevatorAppTypes'
 
 interface UseSocketIOReturnType {
   buildingName: string
@@ -60,17 +61,30 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
       (response: NewConnectionBuildingResponse) => {
         //  client-side response to the server acknowledging the connection
 
+        const { building } = response
+
         console.log('the server has recognized me!', response)
         // console.log('newConnectionAck : buildingState', buildingState)
 
-        setBuildingName(response.name)
-        setNumFloors(response.numFloors)
+        setBuildingName(building.name)
+        setNumFloors(building.numFloors)
 
         //  now connected to socket.io
       }
     )
 
-    const onPersonUpdate = (personUpdate: PersonUpdate) => {
+    const onPersonUpdate = (personUpdateResponse: PersonUpdateResponse) => {
+      if (
+        personUpdateResponse.error ||
+        personUpdateResponse.status === OkOrError.Error
+      ) {
+        console.error(
+          `An error was returned from the server: ${personUpdateResponse.error}`
+        )
+        return
+      }
+
+      const personUpdate = personUpdateResponse.personUpdate
       const person = personUpdate.person
 
       switch (personUpdate.type) {
@@ -104,7 +118,20 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
       }
     }
 
-    const onElevatorUpdate = (elevatorUpdate: ElevatorUpdate) => {
+    const onElevatorUpdate = (
+      elevatorUpdateResponse: ElevatorUpdateResponse
+    ) => {
+      if (
+        elevatorUpdateResponse.error ||
+        elevatorUpdateResponse.status === OkOrError.Error
+      ) {
+        console.error(
+          `An error was returned from the server: ${elevatorUpdateResponse.error}`
+        )
+        return
+      }
+
+      const elevatorUpdate = elevatorUpdateResponse.elevatorUpdate
       const elevator = elevatorUpdate.elevator
 
       console.log('receiving elevator update', elevatorUpdate.type)
@@ -207,8 +234,8 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
     socket.current.emit(
       ClientCommands.SPAWN_NEW_PERSON,
       newPersonName,
-      (response: PersonUpdate) => {
-        console.log('server response to spawnnewperson', response)
+      (personUpdateResponse: PersonUpdateResponse) => {
+        console.log('server response to spawnnewperson', personUpdateResponse)
       }
     )
   }

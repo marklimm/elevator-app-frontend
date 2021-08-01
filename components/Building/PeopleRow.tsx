@@ -22,7 +22,6 @@ export const PeopleRow: FunctionComponent<PeopleRowProps> = ({
             {personIds.map((personId) => {
               const personUpdatesArr = peopleUpdates[personId] || []
 
-              console.log('personUpdatesArr', personUpdatesArr)
               return (
                 <PersonUpdatesMemo
                   key={personId}
