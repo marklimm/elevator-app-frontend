@@ -4,7 +4,8 @@ import { useSocketIO } from 'lib/socketIO/useSocketIO'
 
 import { ElevatorRow } from './ElevatorRow'
 import { PeopleRowMemo } from './PeopleRow'
-import { NewPersonForm } from './NewPersonForm'
+import { NewPersonForm } from './NewPersonForm/NewPersonForm'
+import { usePlaceholderName } from './NewPersonForm/usePlaceholderName'
 
 interface ElevatorAdminViewProps {
   socketIOUrl: string
@@ -23,6 +24,8 @@ export const ElevatorAdminView: FunctionComponent<ElevatorAdminViewProps> = ({
     spawnNewPerson,
   } = useSocketIO(socketIOUrl)
 
+  const { placeholderName } = usePlaceholderName(Object.keys(peopleUpdates))
+
   return (
     <>
       <div className='text-xl font-bold'>{buildingName}</div>
@@ -38,7 +41,10 @@ export const ElevatorAdminView: FunctionComponent<ElevatorAdminViewProps> = ({
       <ElevatorRow elevatorUpdates={elevatorUpdates} />
       <PeopleRowMemo peopleUpdates={peopleUpdates} />
 
-      <NewPersonForm onSpawnNewPerson={spawnNewPerson} />
+      <NewPersonForm
+        onSpawnNewPerson={spawnNewPerson}
+        placeholderName={placeholderName}
+      />
 
       {/* {activeFloorRequest && (
         <span className='text-lg'>

@@ -3,7 +3,7 @@ import { GetStaticProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 
-import { ElevatorAdminView } from 'components/Building/ElevatorAdminView'
+import { ElevatorAdminView } from 'components/AdminView/ElevatorAdminView'
 
 // import { ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";

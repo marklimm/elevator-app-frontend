@@ -8,6 +8,7 @@ interface NewPersonFormProps {
     string,
     onResponse: (personUpdateResponse: PersonUpdateResponse) => void
   ) => void
+  placeholderName: string
 }
 
 /**
@@ -17,6 +18,7 @@ interface NewPersonFormProps {
  */
 export const NewPersonForm: FunctionComponent<NewPersonFormProps> = ({
   onSpawnNewPerson,
+  placeholderName,
 }: NewPersonFormProps) => {
   const [newPersonName, setNewPersonName] = useState<string>('')
 
@@ -36,8 +38,10 @@ export const NewPersonForm: FunctionComponent<NewPersonFormProps> = ({
     //  show a confirmation message and hide it after a few seconds
     setConfirmationMessage(`Attempting to spawn ${newPersonName} ...`)
 
+    const spawnNewUserWithName = newPersonName || placeholderName
+
     onSpawnNewPerson(
-      newPersonName,
+      spawnNewUserWithName,
       (personUpdateResponse: PersonUpdateResponse) => {
         console.log('server response to spawnnewperson', personUpdateResponse)
 
@@ -55,8 +59,12 @@ export const NewPersonForm: FunctionComponent<NewPersonFormProps> = ({
           return
         }
 
-        setConfirmationMessage(`${newPersonName} was spawned!`)
+        setConfirmationMessage(`${spawnNewUserWithName} was spawned!`)
         setConfirmationMessageStatus(OkOrError.Ok)
+
+        setTimeout(() => {
+          setConfirmationMessage('')
+        }, 5000)
 
         //  reset the textbox
         setNewPersonName('')
@@ -71,16 +79,15 @@ export const NewPersonForm: FunctionComponent<NewPersonFormProps> = ({
       <form onSubmit={formSubmitted}>
         <input
           type='text'
-          className='focus:outline-none focus:ring focus:border-blue-400 border-gray-500 border-2 p-1 rounded-md shadow-md'
+          className='focus:outline-none focus:ring focus:border-blue-400 border-gray-500 border-2 p-2 rounded-md shadow-md'
           value={newPersonName}
           onChange={onNewPersonNameTextChange}
-          placeholder="Person's name"
+          placeholder={placeholderName}
         />
 
         <button
           type='submit'
           className='ml-5 bg-blue-400 text-white p-2 disabled:opacity-50'
-          disabled={newPersonName.length === 0}
         >
           Add New Person
         </button>
