@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 /**
  * Generates a random name from an array of names.  The selected name will not be one of the names in `usedNames`
  * @param usedNames
  * @returns
  */
-const getRandomName = (usedNames: string[]): string => {
+const getRandomName = (usedNames: string[] = []): string => {
   const names = [
     'Ash',
     'Brett',
@@ -64,13 +64,20 @@ export const usePlaceholderName = (
   const [placeholderName, setPlaceholderName] = useState<string>('')
   const [usedNames, setUsedNames] = useState<string[]>([])
 
-  if (!arraysAreEqual(currUsedNames, usedNames)) {
-    //  there's been a change in the currently used names, so update the list of used names and update the placeholder name
+  useEffect(() => {
+    if (!arraysAreEqual(currUsedNames, usedNames)) {
+      //  there's been a change in the currently used names, so update the list of used names and update the placeholder name
 
-    setUsedNames(currUsedNames)
+      setUsedNames(currUsedNames)
 
-    setPlaceholderName(getRandomName(currUsedNames))
-  }
+      setPlaceholderName(getRandomName(currUsedNames))
+    }
+
+    //  give the placeholderName an initial value
+    if (placeholderName === '') {
+      setPlaceholderName(getRandomName())
+    }
+  }, [currUsedNames])
 
   return {
     placeholderName,
