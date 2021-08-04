@@ -12,7 +12,7 @@ interface NewPersonFormProps {
 }
 
 /**
- * The form that allows users to spawn a new person (that will go on the elevator)
+ * The form that allows users to spawn a new person (that will request an elevator)
  * @param param0
  * @returns
  */
