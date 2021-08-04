@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from 'react'
 
-import { useSocketIO } from 'lib/socketIO/useSocketIO'
+import { useSocketIOServerConn } from 'lib/socketIO/useSocketIOServerConn'
 
 import { ElevatorRow } from './ElevatorRow'
 import { PeopleRowMemo } from './PeopleRow'
@@ -22,7 +22,7 @@ export const ElevatorAdminView: FunctionComponent<ElevatorAdminViewProps> = ({
     // requestElevator,
     peopleUpdates,
     spawnNewPerson,
-  } = useSocketIO(socketIOUrl)
+  } = useSocketIOServerConn(socketIOUrl)
 
   const { placeholderName } = usePlaceholderName(Object.keys(peopleUpdates))
 

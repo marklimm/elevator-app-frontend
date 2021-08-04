@@ -19,7 +19,7 @@ import {
   PersonUpdateResponse,
 } from 'lib/types/ElevatorAppTypes'
 
-interface UseSocketIOReturnType {
+interface UseSocketIOServerConnReturnType {
   buildingName: string
   elevatorUpdates: UpdatesState
   numFloors: number
@@ -35,7 +35,9 @@ interface UseSocketIOReturnType {
  * @param onStatusUpdateReceived
  * @returns
  */
-export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
+export const useSocketIOServerConn = (
+  socketIOUrl = ''
+): UseSocketIOServerConnReturnType => {
   const socket = useRef<Socket>(null)
 
   const [buildingName, setBuildingName] = useState('')
@@ -89,6 +91,7 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
 
       const personUpdate = personUpdateResponse.personUpdate
       const person = personUpdate.person
+      const elevator = personUpdate.elevator
 
       switch (personUpdate.type) {
         case PersonStatus.NEWLY_SPAWNED:
@@ -118,6 +121,20 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
           )
 
           break
+
+        case PersonStatus.ENTERED_THE_ELEVATOR:
+          personDispatch(
+            addUpdate({
+              id: person.personId,
+              text: `${person.name} has entered ${
+                elevator.name
+              } on the ${getDisplayFloorNumber(
+                personUpdate.currFloor
+              )} floor.  (They want to get to the ${getDisplayFloorNumber(
+                personUpdate.destFloor
+              )} floor)`,
+            })
+          )
       }
     }
 
@@ -172,7 +189,18 @@ export const useSocketIO = (socketIOUrl = ''): UseSocketIOReturnType => {
           elevatorDispatch(
             addUpdate({
               id: elevator.elevatorId,
-              text: `${elevator.name} has reached its destination and is opening its doors on floor ${elevatorUpdate.currFloor}`,
+              text: `${elevator.name} has reached its destination and is opening its doors on floor ${elevatorUpdate.currFloor}.  The elevator is going ${elevator.direction}`,
+            })
+          )
+
+          break
+        }
+
+        case ElevatorStatus.DOORS_OPEN: {
+          elevatorDispatch(
+            addUpdate({
+              id: elevator.elevatorId,
+              text: `${elevator.name} has opened its doors on floor ${elevatorUpdate.currFloor}.  The elevator is going ${elevator.direction}`,
             })
           )
 
