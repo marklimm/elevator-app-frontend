@@ -90,8 +90,8 @@ export const useSocketIOServerConn = (
       }
 
       const personUpdate = personUpdateResponse.personUpdate
-      const person = personUpdate.person
-      const elevator = personUpdate.elevator
+
+      const { destFloor, elevator, person } = personUpdate
 
       switch (personUpdate.type) {
         case PersonStatus.NEWLY_SPAWNED:
@@ -135,6 +135,20 @@ export const useSocketIOServerConn = (
               )} floor)`,
             })
           )
+
+          break
+
+        case PersonStatus.PRESSED_BUTTON:
+          personDispatch(
+            addUpdate({
+              id: person.personId,
+              text: `${person.name} pressed the button in ${
+                elevator.name
+              } to go to the ${getDisplayFloorNumber(destFloor)} floor`,
+            })
+          )
+
+          break
       }
     }
 
@@ -214,11 +228,33 @@ export const useSocketIOServerConn = (
           elevatorDispatch(
             addUpdate({
               id: elevator.elevatorId,
-              text: `${personWhoGaveDestination.name} got into ${
-                elevator.name
-              } and pressed the button to go to the ${getDisplayFloorNumber(
+              text: `${elevator.name} received the request from ${
+                personWhoGaveDestination.name
+              } to go to the ${getDisplayFloorNumber(
                 elevatorUpdate.destFloor
               )} floor`,
+            })
+          )
+
+          break
+        }
+
+        case ElevatorStatus.DOORS_CLOSING: {
+          elevatorDispatch(
+            addUpdate({
+              id: elevator.elevatorId,
+              text: `${elevator.name} is closing its doors`,
+            })
+          )
+
+          break
+        }
+
+        case ElevatorStatus.DOORS_CLOSED: {
+          elevatorDispatch(
+            addUpdate({
+              id: elevator.elevatorId,
+              text: `${elevator.name} has closed its doors and is heading ${elevator.direction} to the ${elevatorUpdate.destFloor} floor`,
             })
           )
 
