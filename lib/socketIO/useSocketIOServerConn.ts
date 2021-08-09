@@ -144,6 +144,30 @@ export const useSocketIOServerConn = (
           )
 
           break
+
+        case PersonStatus.LEFT_THE_ELEVATOR:
+          personDispatch(
+            addUpdate({
+              id: person.name,
+              text: `${
+                person.name
+              } has reached their destination on the ${getDisplayFloorNumber(
+                person.destFloor
+              )} floor and has left the elevator!  Another happy passenger!`,
+            })
+          )
+
+          break
+
+        case PersonStatus.REMOVED_FROM_APP:
+          personDispatch(
+            addUpdate({
+              id: person.name,
+              text: `${person.name} has been removed from the app since they have reached their destination!`,
+            })
+          )
+
+          break
       }
     }
 
