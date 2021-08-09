@@ -11,6 +11,7 @@ import UpdatesReducer, {
 
 import {
   ClientCommands,
+  Direction,
   ElevatorStatus,
   ElevatorUpdateResponse,
   NewConnectionBuildingResponse,
@@ -267,9 +268,11 @@ export const useSocketIOServerConn = (
           elevatorDispatch(
             addUpdate({
               id: elevator.name,
-              text: `${elevator.name} has moved to the ${getDisplayFloorNumber(
-                elevator.currFloor
-              )} floor`,
+              text: `${elevator.name} has ${
+                elevator.direction === Direction.NONE
+                  ? 'reached '
+                  : `moved ${elevator.direction} to `
+              } the ${getDisplayFloorNumber(elevator.currFloor)} floor`,
             })
           )
 

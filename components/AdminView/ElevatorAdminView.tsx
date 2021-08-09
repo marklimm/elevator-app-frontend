@@ -16,7 +16,6 @@ export const ElevatorAdminView: FunctionComponent<ElevatorAdminViewProps> = ({
 }: ElevatorAdminViewProps) => {
   //  setup the connection to the server-side socket io instance
   const {
-    buildingName,
     elevatorUpdates,
     // goToFloor,
     // requestElevator,
@@ -28,16 +27,37 @@ export const ElevatorAdminView: FunctionComponent<ElevatorAdminViewProps> = ({
 
   return (
     <>
-      <div className='text-xl font-bold'>{buildingName}</div>
-      {/* There are currently {numPeopleInBuilding} people in the building
-      <br />
-      <br />
-      <button onClick={buttonClicked}>Send realtime message to server</button>
-      The building has {numFloors} floors
-      <br />
-      <button onClick={addPeople}>Add people</button>
-      <br />
-      <button onClick={removePeople}>Remove people</button> */}
+      <div className='text-xl font-bold'>Building elevator simulator</div>
+      <div className=''>
+        <div className=''>
+          This app simulates 2 elevators moving to different floors within an
+          apartment building.
+        </div>
+
+        <div className='flex mt-5'>
+          <div className='w-1/2'>
+            <span className='text-lg'>People can:</span>
+            <ul className='list-decimal ml-5'>
+              <li>Spawn into existence</li>
+              <li>Request an elevator</li>
+              <li>Get into an elevator</li>
+              <li>Push the button once they are in the elevator</li>
+            </ul>
+          </div>
+          <div className='w-1/2'>
+            <span className='text-lg'>Elevators can:</span>
+            <ul className='list-decimal ml-5'>
+              <li>Take requests to pick up people</li>
+              <li>Open doors when they reach their destination</li>
+              <li>
+                Close doors when the person has pressed a button for what floor
+              </li>
+              <li>Move between floors</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <ElevatorRow elevatorUpdates={elevatorUpdates} />
       <PeopleRowMemo peopleUpdates={peopleUpdates} />
 
