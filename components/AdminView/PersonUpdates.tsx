@@ -14,7 +14,7 @@ const PersonUpdates: FunctionComponent<PersonUpdatesProps> = ({
     <div className='w-1/2'>
       <div className='text-2xl'>Updates for {personId}</div>
 
-      <div className={styles.updatesBox}>
+      <div className={`${styles.personOrElevatorUpdates} bg-red-50  `}>
         {personUpdatesArr.length > 0 &&
           personUpdatesArr.map((personUpdateText) => (
             <div key={personUpdateText}>{personUpdateText}</div>

@@ -3,6 +3,8 @@ import React, { FunctionComponent } from 'react'
 import { PersonUpdatesMemo } from './PersonUpdates'
 import { UpdatesState } from 'lib/socketIO/UpdatesReducer'
 
+import styles from './AdminView.module.scss'
+
 interface PeopleRowProps {
   peopleUpdates: UpdatesState
 }
@@ -14,26 +16,22 @@ export const PeopleRow: FunctionComponent<PeopleRowProps> = ({
 
   return (
     <>
-      <div>
+      <div className={styles.updatesContainer}>
         {personIds.length === 0 && (
           <span>No people updates have been received yet</span>
         )}
 
-        {personIds.length > 0 && (
-          <div className='flex mt-3'>
-            {personIds.map((personId) => {
-              const personUpdatesArr = peopleUpdates[personId] || []
+        {personIds.map((personId) => {
+          const personUpdatesArr = peopleUpdates[personId] || []
 
-              return (
-                <PersonUpdatesMemo
-                  key={personId}
-                  personId={personId}
-                  personUpdatesArr={personUpdatesArr}
-                />
-              )
-            })}
-          </div>
-        )}
+          return (
+            <PersonUpdatesMemo
+              key={personId}
+              personId={personId}
+              personUpdatesArr={personUpdatesArr}
+            />
+          )
+        })}
       </div>
     </>
   )

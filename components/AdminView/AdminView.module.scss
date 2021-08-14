@@ -1,5 +1,12 @@
 
-//  a <div> that displays updates for either an individual Elevator or individual Person
-.updatesBox {
-  @apply mt-1 mr-4 bg-blue-200 h-64 max-h-64 overflow-y-auto
+
+//  the <div> that contains (1) all of the Elevator updates or (2) all of the Person updates
+.updatesContainer {
+  @apply flex mt-3 mb-10 h-72
 }
+
+//  a <div> that displays updates for either an individual Elevator or individual Person
+.personOrElevatorUpdates {
+  @apply mt-1 mr-4 p-2 h-64 max-h-64 overflow-y-auto
+}
+
