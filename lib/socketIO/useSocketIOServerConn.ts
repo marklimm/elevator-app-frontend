@@ -84,15 +84,15 @@ export const useSocketIOServerConn = (
         return
       }
 
-      const personUpdate = personUpdateResponse.personUpdate
+      const { type, timestamp, elevator, person } =
+        personUpdateResponse.personUpdate
 
-      const { elevator, person } = personUpdate
-
-      switch (personUpdate.type) {
+      switch (type) {
         case PersonStatus.NEWLY_SPAWNED:
           personDispatch(
             addUpdate({
               id: person.name,
+              timestamp,
               text: `${
                 person.name
               } has just appeared.  They are on the ${getDisplayFloorNumber(
@@ -107,6 +107,7 @@ export const useSocketIOServerConn = (
           personDispatch(
             addUpdate({
               id: person.name,
+              timestamp,
               text: `${person.name} on the ${getDisplayFloorNumber(
                 person.currFloor
               )} floor has requested the elevator.  (They want to get to the ${getDisplayFloorNumber(
@@ -121,6 +122,7 @@ export const useSocketIOServerConn = (
           personDispatch(
             addUpdate({
               id: person.name,
+              timestamp,
               text: `${person.name} has entered ${
                 elevator.name
               } on the ${getDisplayFloorNumber(
@@ -137,6 +139,7 @@ export const useSocketIOServerConn = (
           personDispatch(
             addUpdate({
               id: person.name,
+              timestamp,
               text: `${person.name} pressed the button in ${
                 elevator.name
               } to go to the ${getDisplayFloorNumber(person.destFloor)} floor`,
@@ -149,6 +152,7 @@ export const useSocketIOServerConn = (
           personDispatch(
             addUpdate({
               id: person.name,
+              timestamp,
               text: `${
                 person.name
               } has reached their destination on the ${getDisplayFloorNumber(
@@ -163,6 +167,8 @@ export const useSocketIOServerConn = (
           personDispatch(
             addUpdate({
               id: person.name,
+              timestamp,
+
               text: `${person.name} has been removed from the app since they have reached their destination!`,
             })
           )
@@ -184,7 +190,8 @@ export const useSocketIOServerConn = (
         return
       }
 
-      const { type, elevator, people } = elevatorUpdateResponse.elevatorUpdate
+      const { type, timestamp, elevator, people } =
+        elevatorUpdateResponse.elevatorUpdate
 
       // console.log('receiving elevator update', type)
 
@@ -193,6 +200,7 @@ export const useSocketIOServerConn = (
           elevatorDispatch(
             addUpdate({
               id: elevator.name,
+              timestamp,
               text: `${elevator.name} is ready on the ${getDisplayFloorNumber(
                 elevator.currFloor
               )} floor and waiting to take a request `,
@@ -206,6 +214,7 @@ export const useSocketIOServerConn = (
           elevatorDispatch(
             addUpdate({
               id: elevator.name,
+              timestamp,
               text: `${
                 elevator.name
               } is taking the request to go to the ${getDisplayFloorNumber(
@@ -221,6 +230,7 @@ export const useSocketIOServerConn = (
           elevatorDispatch(
             addUpdate({
               id: elevator.name,
+              timestamp,
               text: `${
                 elevator.name
               } has reached its destination and is opening its doors on the ${getDisplayFloorNumber(
@@ -236,6 +246,7 @@ export const useSocketIOServerConn = (
           elevatorDispatch(
             addUpdate({
               id: elevator.name,
+              timestamp,
               text: `${
                 elevator.name
               } has opened its doors on the ${getDisplayFloorNumber(
@@ -253,6 +264,7 @@ export const useSocketIOServerConn = (
           elevatorDispatch(
             addUpdate({
               id: elevator.name,
+              timestamp,
               text: `${elevator.name} received the request from ${
                 personWhoGaveDestination.name
               } to go to the ${getDisplayFloorNumber(
@@ -268,6 +280,7 @@ export const useSocketIOServerConn = (
           elevatorDispatch(
             addUpdate({
               id: elevator.name,
+              timestamp,
               text: `${elevator.name} is closing its doors`,
             })
           )
@@ -279,6 +292,7 @@ export const useSocketIOServerConn = (
           elevatorDispatch(
             addUpdate({
               id: elevator.name,
+              timestamp,
               text: `${elevator.name} has closed its doors and is heading ${
                 elevator.direction
               } to the ${getDisplayFloorNumber(elevator.destFloor)} floor`,
@@ -292,6 +306,7 @@ export const useSocketIOServerConn = (
           elevatorDispatch(
             addUpdate({
               id: elevator.name,
+              timestamp,
               text: `${elevator.name} has ${
                 elevator.direction === Direction.NONE
                   ? 'reached '

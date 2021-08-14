@@ -6,7 +6,11 @@
 }
 
 //  a <div> that displays updates for either an individual Elevator or individual Person
-.personOrElevatorUpdates {
+.updatesContainer .personOrElevatorUpdates {
   @apply mt-1 mr-4 p-2 h-64 max-h-64 overflow-y-auto
 }
 
+
+.personOrElevatorUpdates .time {
+  @apply font-semibold inline-block w-28;
+}

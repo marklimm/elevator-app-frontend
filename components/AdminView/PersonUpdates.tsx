@@ -1,9 +1,11 @@
 import React, { FunctionComponent } from 'react'
 import styles from './AdminView.module.scss'
 
+import { FormattedUpdate } from 'lib/socketIO/UpdatesReducer'
+
 interface PersonUpdatesProps {
   personId: string
-  personUpdatesArr: string[]
+  personUpdatesArr: FormattedUpdate[]
 }
 
 const PersonUpdates: FunctionComponent<PersonUpdatesProps> = ({
@@ -16,8 +18,13 @@ const PersonUpdates: FunctionComponent<PersonUpdatesProps> = ({
 
       <div className={`${styles.personOrElevatorUpdates} bg-red-50  `}>
         {personUpdatesArr.length > 0 &&
-          personUpdatesArr.map((personUpdateText) => (
-            <div key={personUpdateText}>{personUpdateText}</div>
+          personUpdatesArr.map((personUpdate) => (
+            <div key={personUpdate.text}>
+              <div className={`${styles.time} text-red-700 `}>
+                {personUpdate.formattedTime}
+              </div>
+              {personUpdate.text}
+            </div>
           ))}
       </div>
     </div>

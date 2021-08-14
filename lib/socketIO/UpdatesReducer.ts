@@ -1,16 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { format, toDate } from 'date-fns'
 
 /**
  * A key-value mapping of {elevatorId/userId}: an array of log messages for the elevator/user in question
  */
 export interface UpdatesState {
-  [key: string]: string[]
+  [key: string]: FormattedUpdate[]
 }
 
 export const updatesInitialState: UpdatesState = {}
 
-export interface AnUpdate {
+interface AnUpdate {
   id: string
+  timestamp: number
+  text: string
+}
+
+export interface FormattedUpdate {
+  id: string
+  formattedTime: string
   text: string
 }
 
@@ -19,16 +27,21 @@ const updatesSlice = createSlice({
   initialState: updatesInitialState,
   reducers: {
     addUpdate(state, action: PayloadAction<AnUpdate>) {
-      const id = action.payload.id
-      const text = action.payload.text
+      const { id, text, timestamp } = action.payload
 
       if (!state[id]) {
         state[id] = []
       }
 
-      const date = `${Date.now()}`
+      const date = toDate(timestamp)
 
-      state[id].unshift(`[${date}]: ${text}`)
+      const formattedTime = format(date, 'pp')
+
+      state[id].unshift({
+        id,
+        formattedTime,
+        text,
+      })
     },
   },
 })
