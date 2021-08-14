@@ -1,0 +1,7 @@
+.navBar {
+  @apply p-4 flex justify-between
+}
+
+.link {
+  @apply mx-10 text-red-600 hover:text-green-600
+}

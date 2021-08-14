@@ -18,9 +18,7 @@ const MyApp: FunctionComponent<AppProps> = ({
         <title>Elevator App</title>
       </Head>
       <div className=''>
-        <div className='m-3'>
-          <Component {...pageProps} />
-        </div>
+        <Component {...pageProps} />
       </div>
     </>
   )

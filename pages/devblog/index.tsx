@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
-import Link from 'next/link'
+import { NavBar } from 'components/NavBar/NavBar'
 
 import { Post } from 'lib/types/Post'
 import { getSortedMarkdownFiles } from 'lib/markdownParser'
@@ -26,19 +26,20 @@ const DevBlog: FunctionComponent<DevBlogProps> = ({
       </Head>
 
       <div className=''>
-        <Link href='/'>
-          <a>Back to Home</a>
-        </Link>
-        <h1 className='text-2xl text-center'>Developer Blog</h1>
+        <NavBar />
 
-        <div className='mt-8 flex justify-center'>
-          <div className='lg:w-3/4 xl:w-2/3 2xl:w-1/2'>
-            {devBlogPosts.length > 0 &&
-              devBlogPosts.map((post) => (
-                <div key={post.id} className=''>
-                  <DevBlogPost devBlogPost={post} />
-                </div>
-              ))}
+        <div className='m-3'>
+          <h1 className='text-2xl text-center'>Developer Blog</h1>
+
+          <div className='mt-8 flex justify-center'>
+            <div className='lg:w-3/4 xl:w-2/3 2xl:w-1/2'>
+              {devBlogPosts.length > 0 &&
+                devBlogPosts.map((post) => (
+                  <div key={post.id} className=''>
+                    <DevBlogPost devBlogPost={post} />
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
       </div>

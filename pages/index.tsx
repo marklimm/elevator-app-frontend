@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from 'react'
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
-import Link from 'next/link'
 
 import { ElevatorAdminView } from 'components/AdminView/ElevatorAdminView'
+import { NavBar } from 'components/NavBar/NavBar'
 
 // import { ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
@@ -39,21 +39,18 @@ const HomePage: FunctionComponent<HomePageProps> = ({
       </Head>
 
       <div className=''>
-        This is a nextJS app!
-        <br />
-        <Link href='/devblog'>
-          <a>Developer Blog</a>
-        </Link>
+        <NavBar />
+
         <div className='m-3'>
-          <div className='text-xl font-bold'>Building elevator simulator</div>
-          <div className='mb-5'>
-            This app simulates 2 elevators moving to different floors within an
+          <div className='mb-8'>
+            <span className='text-xl font-bold'>What is this? </span>&nbsp; This
+            app simulates 2 elevators moving to different floors within an
             apartment building!
           </div>
 
           <ElevatorAdminView socketIOUrl={socketIOUrl} />
 
-          <div className='mt-8'>
+          <div className='mt-16'>
             This app simulates 2 elevators moving to different floors within an
             apartment building!
           </div>
