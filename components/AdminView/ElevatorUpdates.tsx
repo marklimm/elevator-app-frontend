@@ -1,5 +1,7 @@
 import React, { FunctionComponent } from 'react'
 
+import styles from './AdminView.module.scss'
+
 interface ElevatorUpdatesProps {
   elevatorId: string
   elevatorUpdatesArr: string[]
@@ -11,13 +13,15 @@ const ElevatorUpdates: FunctionComponent<ElevatorUpdatesProps> = ({
 }: ElevatorUpdatesProps) => {
   // console.log(`<ElevatorUpdates /> rendering for ${elevatorId} `)
   return (
-    <div className='p-3 w-1/2'>
+    <div className='w-1/2'>
       <div className='text-2xl'>Updates for {elevatorId}</div>
 
-      {elevatorUpdatesArr.length > 0 &&
-        elevatorUpdatesArr.map((elevatorUpdateText) => (
-          <div key={elevatorUpdateText}>{elevatorUpdateText}</div>
-        ))}
+      <div className={styles.updatesBox}>
+        {elevatorUpdatesArr.length > 0 &&
+          elevatorUpdatesArr.map((elevatorUpdateText) => (
+            <div key={elevatorUpdateText}>{elevatorUpdateText}</div>
+          ))}
+      </div>
     </div>
   )
 }

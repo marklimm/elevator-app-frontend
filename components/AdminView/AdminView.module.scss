@@ -1,0 +1,5 @@
+
+//  a <div> that displays updates for either an individual Elevator or individual Person
+.updatesBox {
+  @apply mt-1 mr-4 bg-blue-200 h-64 max-h-64 overflow-y-auto
+}
