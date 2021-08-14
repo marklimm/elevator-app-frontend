@@ -45,7 +45,47 @@ const HomePage: FunctionComponent<HomePageProps> = ({
           <a>Developer Blog</a>
         </Link>
         <div className='m-3'>
+          <div className='text-xl font-bold'>Building elevator simulator</div>
+          <div className='mb-5'>
+            This app simulates 2 elevators moving to different floors within an
+            apartment building!
+          </div>
+
           <ElevatorAdminView socketIOUrl={socketIOUrl} />
+
+          <div className='mt-8'>
+            This app simulates 2 elevators moving to different floors within an
+            apartment building!
+          </div>
+
+          <div className='flex mt-5'>
+            <div className='w-1/2'>
+              <span className='text-lg'>People can:</span>
+              <ul className='list-decimal ml-5'>
+                <li>Spawn into existence</li>
+                <li>Request an elevator</li>
+                <li>Get into an elevator</li>
+                <li>Push the button once they are in the elevator</li>
+                <li>
+                  Get off the elevator when they&apos;ve reached their
+                  destination floor
+                </li>
+                <li>Un-spawn from the app</li>
+              </ul>
+            </div>
+            <div className='w-1/2'>
+              <span className='text-lg'>Elevators can:</span>
+              <ul className='list-decimal ml-5'>
+                <li>Take requests to pick up people</li>
+                <li>Move between floors</li>
+                <li>Open doors when they reach their destination</li>
+                <li>
+                  Close doors when the person has pressed a button for what
+                  floor
+                </li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
       {/* 

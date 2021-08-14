@@ -27,37 +27,6 @@ export const ElevatorAdminView: FunctionComponent<ElevatorAdminViewProps> = ({
 
   return (
     <>
-      <div className='text-xl font-bold'>Building elevator simulator</div>
-      <div className=''>
-        <div className=''>
-          This app simulates 2 elevators moving to different floors within an
-          apartment building.
-        </div>
-
-        <div className='flex mt-5'>
-          <div className='w-1/2'>
-            <span className='text-lg'>People can:</span>
-            <ul className='list-decimal ml-5'>
-              <li>Spawn into existence</li>
-              <li>Request an elevator</li>
-              <li>Get into an elevator</li>
-              <li>Push the button once they are in the elevator</li>
-            </ul>
-          </div>
-          <div className='w-1/2'>
-            <span className='text-lg'>Elevators can:</span>
-            <ul className='list-decimal ml-5'>
-              <li>Take requests to pick up people</li>
-              <li>Open doors when they reach their destination</li>
-              <li>
-                Close doors when the person has pressed a button for what floor
-              </li>
-              <li>Move between floors</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
       <ElevatorRow elevatorUpdates={elevatorUpdates} />
       <PeopleRowMemo peopleUpdates={peopleUpdates} />
 
@@ -66,11 +35,6 @@ export const ElevatorAdminView: FunctionComponent<ElevatorAdminViewProps> = ({
         placeholderName={placeholderName}
       />
 
-      {/* {activeFloorRequest && (
-        <span className='text-lg'>
-          There is an active floor request to go to floor: {activeFloorRequest}
-        </span>
-      )} */}
       {/* <div className='flex'>
         {elevatorsArr.map((elevator, index) => (
           <div key={index} className='m-5' style={{ minWidth: '400px' }}>
