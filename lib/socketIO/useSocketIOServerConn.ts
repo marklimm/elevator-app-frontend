@@ -235,7 +235,7 @@ export const useSocketIOServerConn = (
                 elevator.name
               } has reached its destination and is opening its doors on the ${getDisplayFloorNumber(
                 elevator.currFloor
-              )} floor.  The elevator is going ${elevator.direction}`,
+              )} floor.  The elevator is going ${elevator.committedDirection}`,
             })
           )
 
@@ -251,7 +251,7 @@ export const useSocketIOServerConn = (
                 elevator.name
               } has opened its doors on the ${getDisplayFloorNumber(
                 elevator.currFloor
-              )} floor.  The elevator is going ${elevator.direction}`,
+              )} floor.  The elevator is going ${elevator.committedDirection}`,
             })
           )
 
@@ -294,7 +294,7 @@ export const useSocketIOServerConn = (
               id: elevator.name,
               timestamp,
               text: `${elevator.name} has closed its doors and is heading ${
-                elevator.direction
+                elevator.committedDirection
               } to the ${getDisplayFloorNumber(elevator.destFloor)} floor`,
             })
           )

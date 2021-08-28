@@ -53,9 +53,13 @@ const HomePage: FunctionComponent<HomePageProps> = ({
           <div className='mt-16'>
             This app simulates 2 elevators moving to different floors within an
             apartment building!
+            <br />
+            <br />
+            Please click the &quot;Add New Person&quot; button to spawn a new
+            person who will call for an elevator
           </div>
 
-          <div className='flex mt-5'>
+          <div className='flex mt-8'>
             <div className='w-1/2'>
               <span className='text-lg'>People can:</span>
               <ul className='list-decimal ml-5'>
