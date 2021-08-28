@@ -11,12 +11,14 @@ export interface UpdatesState {
 export const updatesInitialState: UpdatesState = {}
 
 interface AnUpdate {
+  emphasize: boolean
   id: string
   timestamp: number
   text: string
 }
 
 export interface FormattedUpdate {
+  emphasize: boolean
   id: string
   formattedTime: string
   text: string
@@ -27,7 +29,7 @@ const updatesSlice = createSlice({
   initialState: updatesInitialState,
   reducers: {
     addUpdate(state, action: PayloadAction<AnUpdate>) {
-      const { id, text, timestamp } = action.payload
+      const { id, emphasize, text, timestamp } = action.payload
 
       if (!state[id]) {
         state[id] = []
@@ -39,6 +41,7 @@ const updatesSlice = createSlice({
 
       state[id].unshift({
         id,
+        emphasize,
         formattedTime,
         text,
       })

@@ -153,6 +153,7 @@ export const useSocketIOServerConn = (
             addUpdate({
               id: person.name,
               timestamp,
+              emphasize: true,
               text: `${
                 person.name
               } has reached their destination on the ${getDisplayFloorNumber(
@@ -200,6 +201,7 @@ export const useSocketIOServerConn = (
           elevatorDispatch(
             addUpdate({
               id: elevator.name,
+              emphasize: true,
               timestamp,
               text: `${elevator.name} is ready on the ${getDisplayFloorNumber(
                 elevator.currFloor

@@ -23,7 +23,9 @@ const PersonUpdates: FunctionComponent<PersonUpdatesProps> = ({
               <div className={`${styles.time} text-red-700 `}>
                 {personUpdate.formattedTime}
               </div>
-              {personUpdate.text}
+              <span className={`${personUpdate.emphasize ? 'font-bold' : ''}`}>
+                {personUpdate.text}
+              </span>
             </div>
           ))}
       </div>

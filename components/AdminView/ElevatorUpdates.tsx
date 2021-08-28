@@ -21,11 +21,16 @@ const ElevatorUpdates: FunctionComponent<ElevatorUpdatesProps> = ({
       <div className={`${styles.personOrElevatorUpdates} bg-green-50`}>
         {elevatorUpdatesArr.length > 0 &&
           elevatorUpdatesArr.map((elevatorUpdate) => (
-            <div key={elevatorUpdate.text} className=''>
+            // formattedTime might not be the best thing to use for `key`, but it is unique
+            <div key={elevatorUpdate.formattedTime} className=''>
               <div className={`${styles.time} text-green-700 `}>
                 {elevatorUpdate.formattedTime}
               </div>
-              {elevatorUpdate.text}
+              <span
+                className={`${elevatorUpdate.emphasize ? 'font-bold' : ''}`}
+              >
+                {elevatorUpdate.text}
+              </span>
             </div>
           ))}
       </div>
