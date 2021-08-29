@@ -11,14 +11,14 @@ export interface UpdatesState {
 export const updatesInitialState: UpdatesState = {}
 
 interface AnUpdate {
-  emphasize: boolean
+  emphasize?: boolean
   id: string
   timestamp: number
   text: string
 }
 
 export interface FormattedUpdate {
-  emphasize: boolean
+  emphasize?: boolean
   id: string
   formattedTime: string
   text: string
