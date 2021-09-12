@@ -16,7 +16,7 @@ export const PeopleRow: FunctionComponent<PeopleRowProps> = ({
 
   return (
     <>
-      <div className={styles.updatesContainer}>
+      <div className='grid grid-cols-3 gap-4'>
         {personIds.length === 0 && (
           <span>No people updates have been received yet</span>
         )}
