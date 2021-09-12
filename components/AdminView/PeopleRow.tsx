@@ -3,7 +3,7 @@ import React, { FunctionComponent } from 'react'
 import { PersonUpdatesMemo } from './PersonUpdates'
 import { UpdatesState } from 'lib/socketIO/UpdatesReducer'
 
-import styles from './AdminView.module.scss'
+// import styles from './AdminView.module.scss'
 
 interface PeopleRowProps {
   peopleUpdates: UpdatesState

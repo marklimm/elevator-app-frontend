@@ -164,13 +164,13 @@ export const useSocketIOServerConn = (
 
           break
 
-        case PersonStatus.REMOVED_FROM_APP:
+        case PersonStatus.UNSPAWNED:
           personDispatch(
             addUpdate({
               id: person.name,
               timestamp,
 
-              text: `${person.name} has been removed from the app since they have reached their destination!`,
+              text: `${person.name} has reached their destination!  They have un-spawned from the app`,
             })
           )
 

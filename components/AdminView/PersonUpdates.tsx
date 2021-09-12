@@ -13,7 +13,7 @@ const PersonUpdates: FunctionComponent<PersonUpdatesProps> = ({
   personUpdatesArr,
 }: PersonUpdatesProps) => {
   return (
-    <div className='w-1/2'>
+    <div className=''>
       <div className='text-2xl'>Updates for {personId}</div>
 
       <div className={`${styles.personOrElevatorUpdates} bg-red-50  `}>
