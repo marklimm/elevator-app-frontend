@@ -4,16 +4,10 @@ body {
 
   @apply text-xl;
 
+  
   a {
-    @apply text-blue-500 hover:text-blue-800
+    @apply text-red-600 hover:text-green-600
   }
 
-  //  CSS styles for the markdown file content that has been converted into html
-  .markdownContent {
-    p,
-    ul {
-      @apply mt-3;
-    }
-  }
   
 }

@@ -1,0 +1,24 @@
+
+  .whiteBlock {
+    @apply m-8 p-6 rounded-md bg-green-50 max-w-screen-xl 
+  }
+
+  //  CSS styles for the markdown file content that has been converted into html
+  .markdownContent {
+    p {
+      @apply mt-7
+    }
+
+    h1 {
+      @apply text-2xl font-bold
+    }
+
+    ul {
+      @apply mt-1;
+
+      li {
+        @apply mt-0;
+      }
+    }
+
+  }
